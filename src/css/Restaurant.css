@@ -1,0 +1,377 @@
+@font-face {
+    src :url(../fonts/Vazir-Thin.ttf);
+    font-family: vazir-thin;
+}
+
+@font-face {
+    src :url(../fonts/Vazir-Bold.ttf);
+    font-family: vazir-bold;
+}
+
+@font-face {
+    src :url(../fonts/Vazir-Medium.ttf);
+    font-family: vazir-medium;
+}
+
+@font-face {
+    src :url(../fonts/Vazir.ttf);
+    font-family: vazir;
+}
+
+* {
+    font-family: vazir-thin;
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+@media screen and (min-width: 901px) {
+    .minus-plus div,.minus-plus i:before,.price{
+        font-size: 10px;
+    }
+
+    .order-name,.basket-title{
+        font-size: 15px;
+    }
+
+}
+
+@media screen and (max-width: 900px) {
+    .minus-plus div,.minus-plus i:before,.price{
+        font-size: 7px;
+    }
+
+    .price{
+        font-size: 5px;
+    }
+}
+
+html,body{
+    height: 100%;
+    min-height: 100%;
+    background: #F7FFF7!important;
+    padding: 0;
+    margin: 0;
+}
+
+#wrapper{
+    min-height: 100%;
+    position: relative;
+}
+
+.header div a{
+    text-decoration:none;
+    color:black;
+}
+
+header{
+    top:0;
+    position:fixed;
+    z-index:1;
+    height:3vh;
+    width:100%;
+    background-color:white;
+}
+
+.header i:before{
+    box-sizing:border-box;
+    color: #515151;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    float: left;
+    font-style: normal;
+    font-size: 2vmin;
+    margin-left: 2%;
+}
+
+header div {
+    box-sizing:border-box;
+    height:100%;
+    float:left;
+    text-align:center;
+    color: #515151;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2vmin;
+    margin-left : 2%;
+}
+
+.exit {
+    color:#FBA1A1;
+
+}
+
+.logo-container {
+    float:right;
+    margin-top:0%;
+    margin-right:5%;
+}
+
+#logo {
+    display:inline-block;
+    height:100%;
+}
+
+.restaurant-logo-environment {
+    position: relative;
+    top:3vh;
+    background-color: #FF6B6B;
+    height: 14vmin;
+    width: 100%;
+    border: 1px solid red;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+
+
+.restaurant-logo{
+    position: absolute;
+    height:18vmin;
+    top:25%;
+    border-radius: 15%;
+    border: 5px solid white;
+    -webkit-box-shadow: 0 0 10px gray;
+    box-shadow: 0 0 10px gray;
+}
+
+.restaurant-name {
+    position: relative;
+    top:170%;
+    font-size: 2.5vmin;
+    font-family: vazir-medium;
+}
+
+.foodTitle{
+    position:absolute;
+    top:38vmin;
+    font-size: 3vmin;
+    font-weight: lighter;
+    padding-right:1%;
+    left:3.6%;
+    width:65%;
+    display: flex;
+    justify-content: center;
+}
+
+.foodTitle span{
+    position:absolute;
+    border-bottom:1px solid #003A4A;
+    color:#003A4A;
+    text-align:center;
+    padding:0 1%;
+    width:28%;
+    left:37%;
+}
+
+.flex-container {
+    margin-top: 30vmin;
+    /*margin-left: -10%;*/
+    padding-right:2.2%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    width:64%;
+    border-right: 1px dashed #D3D3D3;
+    padding-bottom: 8vmin;
+
+}
+
+.panel-body{
+    box-shadow:-1px 1px 5px 0px rgba(224,221,224,1);
+    padding:3%;
+    width:30%;
+    margin:1.5%;
+    margin-bottom:5%;
+    transform: scaleY(1.15);
+    text-align:center;
+}
+
+
+.food-image{
+    width:50%;
+}
+
+.food-name span{
+    font-size: 1.2vmin;
+}
+
+.food-name{
+    font-size: 1.5vmin;
+}
+
+
+.food-price{
+    font-size: 1.2vmin;
+    padding-bottom:0.5vmin;
+}
+
+.food-cart-add{
+    background-color:#FFE66D;
+    width:78%;
+    margin:auto;
+    font-size:1.25vmin;
+}
+
+.star{
+    width:5%;
+}
+
+#Expired .food-cart-add{
+    background-color:#D3D3D3;
+}
+
+
+.content{
+    height: 50vh;
+    width: 100%;
+    background-color: #FBA1A1;
+    margin: 20px;
+}
+
+.basket {
+    margin-top:29.5vmin;
+    float: right;
+    margin-right: 2.7%;
+    margin-left: 2.7%;
+    background-color:white;
+    box-shadow:-1px 1px 5px 0px rgba(224,221,224,1);
+    width:25%;
+    text-align: center;
+    padding-bottom: 2%;
+    border-radius: 5px;
+}
+
+
+.minus-plus{
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
+}
+
+.minus-plus div{
+    flex-grow: 1;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flaticon-minus {
+    color: red;
+}
+
+.minus-plus i:before {
+    flex-grow: 1;
+    font-style: normal;
+    margin-left: 0px;
+}
+
+.column-group{
+    display: flex;
+    flex-direction: column;
+    float: left;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 30%;
+    text-align:left;
+}
+
+.price {
+    color: #585858;
+    text-align: center;
+    font-size:0.88vw;
+}
+
+.row-group{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    border-bottom:1px solid #D3D3D3;
+    margin-bottom:5%;
+    padding-bottom: 5%;
+}
+
+.order-name {
+    position: absolute;
+    right:0px;
+    color: #585858;
+    font-weight: lighter;
+    font-size: 2vmin;
+
+}
+
+@media screen and (min-width: 901px) {
+    .order-name{
+        font-size:1.4vw;
+    }
+
+}
+
+
+
+.basket-title{
+    font-size: 2vmin;
+    margin-top: 5%;
+    font-weight: lighter;
+    border-bottom:1px solid #787878;
+    display: inline-block;
+    margin-bottom: 5%;
+}
+
+.orders-container{
+    border: 1px dashed #D3D3D3;
+    margin-right:10%;
+    margin-left: 10%;
+    border-radius: 20px;
+    padding:5% 10% 5% 10%;
+}
+
+.total-price{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-weight: 100;
+    font-size: 2vmin;
+    padding: 4%;
+}
+
+.btn-confirm{
+    background-color: #4ECCC3;
+    border-radius:5px;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 2vmin;
+    padding: 1vmin;
+}
+
+#footer{
+    font-size: 1.5vmin;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left:0;
+    background-color:#1A535C;
+    box-shadow: 0px 0 10px rgba(0, 0, 0, 0.5);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:5vmin;
+}
+
+
+

@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import {Restaurant} from './restaurant';
 import * as serviceWorker from './serviceWorker';
-
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <Restaurant id="5e4fcf14af68ed25d5900f3e"/>
   </React.StrictMode>,
   document.getElementById('root')
 );
