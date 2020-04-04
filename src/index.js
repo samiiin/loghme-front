@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Restaurant} from './restaurant';
+import {Home} from './Home';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
-  <React.StrictMode>
-      <Restaurant id="5e4fcf14af68ed25d5900f3e"/>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <Home />,
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

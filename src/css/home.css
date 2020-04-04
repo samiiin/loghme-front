@@ -1,0 +1,380 @@
+@font-face {
+    src :url(../fonts/Vazir-Thin.ttf);
+    font-family: vazir-thin;
+}
+
+@font-face {
+    src :url(../fonts/Vazir-Bold.ttf);
+    font-family: vazir-bold;
+}
+
+@font-face {
+    src :url(../fonts/Vazir-Medium.ttf);
+    font-family: vazir-medium;
+}
+
+@font-face {
+    src :url(../fonts/Vazir.ttf);
+    font-family: vazir;
+}
+
+* {
+    font-family: vazir-thin;
+}
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+@media screen and (min-width: 901px) {
+    .minus-plus div,.minus-plus i:before,.price{
+        font-size: 10px;
+    }
+
+    .order-name,.basket-title{
+        font-size: 15px;
+    }
+
+}
+
+@media screen and (max-width: 900px) {
+    .minus-plus div,.minus-plus i:before,.price{
+        font-size: 7px;
+    }
+
+    .price{
+        font-size: 5px;
+    }
+}
+
+html,body{
+   height: 100%;
+   min-height: 100%;
+   background: #F7FFF7!important;
+   padding: 0;
+   margin: 0;
+}
+
+#root{
+    min-height: 100%;
+    position: relative;
+}
+
+.header div a{
+	text-decoration:none;
+	color:black;
+}
+
+header{
+    top:0;
+    position:fixed;
+    z-index:1;
+    height:3vh;
+    width:100%;
+    background-color:white;
+}
+
+.header i:before{
+    box-sizing:border-box;
+    color: #515151;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    float: left;
+    font-style: normal;
+    font-size: 2vmin;
+    margin-left: 2%;
+}
+
+header div {
+    box-sizing:border-box;
+    height:100%;
+    float:left;
+    text-align:center;
+    color: #515151;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2vmin;
+    margin-left : 2%;
+}
+
+.exit {
+    color:#FBA1A1;
+
+}
+
+.home-logo-environment {
+    position: relative;
+    top:3vh;
+    background-color: #FF6B6B;
+    height: 20vmin;
+    width: 100%;
+    border: 1px solid red;
+
+    text-align: center;
+	justify-content: center;
+	
+	
+	
+
+	  background:  url(../images/Cover.jpg)  no-repeat center center fixed;
+  background-size: cover;
+  box-shadow:inset 0 0 0 2000px rgba(218, 0, 103, 0.3);
+}
+
+#description {
+   height:17vh;
+   color: white;
+   text-align: center;
+   text-shadow: 0.3px 0.3px;
+
+   
+}
+
+#description img{
+  width: 9vmin;
+}
+
+#search-box {
+
+  height: 3vh;
+  background-color:white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+}
+
+#search-box > div {
+  background-color: pink;
+}
+
+
+#content{
+width: 100%;
+  height: 100%;
+  margin-top: 1.5vh;
+  display: flex;
+  flex-flow: column;
+ 
+}
+
+#food-party{
+  
+ margin-top: 7vh;
+
+ display: flex;
+ flex-flow: column;
+ justify-content: center;
+ align-items: center;
+}
+
+.titre{
+text-align: center;
+  width: 15%;
+  
+  margin-bottom: 1%;
+  
+  border-bottom:1px solid #003A4A;
+
+  font-family: vazir-bold;
+}
+
+#food-party .timer{
+  border:1px solid #003A4A;
+  font-size: 1vw;
+   margin-bottom: 1%;
+   padding: 0.75vmin;
+}
+
+#food-party .scrollmenu {
+
+  overflow: auto;
+  white-space: nowrap;
+  border-top: 1px solid #D3D3D3;
+  border-bottom: 1px solid #D3D3D3;
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  box-shadow:-1px 1px 5px 0px rgba(224,221,224,1);
+  
+  
+}
+
+.scrollmenu::-webkit-scrollbar {
+  display: none;
+}
+
+.restaurant-photo-name img{
+ /* display: inline-block;*/
+
+}
+
+.discountFood {
+  background-color:white;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  margin-right: 2vh;
+  margin-left: 2vh;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  box-shadow:-1px 1px 5px 0px rgba(224,221,224,1);
+  
+  
+}
+
+@media screen and (min-width: 901px) {
+    .discountFood {
+	  width:15vw;
+	  
+	}
+
+}
+
+.discountFood .restaurant-photo-name{
+  height: 55%;
+  width:50%;
+  display : flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  margin-top:1vh;
+  position: relative;
+  margin-bottom: 1vh;
+  
+ }
+ 
+ @media screen and (min-width: 901px) {
+    .discountFood .restaurant-photo-name {
+	  width:13vw;
+	}
+
+}
+
+.discountFood .restaurant-photo-name img{
+  width:8vw;
+  height: 8vw;
+ /* display: inline-block;*/
+  position: relative;
+  
+  margin-top:0.5vmin;
+}
+
+ @media screen and (min-width: 901px) {
+    .discountFood .restaurant-photo-name img {
+	  width:4vw;
+	  height:4vw;
+	}
+
+}
+
+.discountFood .restaurant-photo-name .discountFoodName{
+  text-align: right;
+    /*display: inline-block;*/
+ width: 50%;
+ font-size:2vmin;
+}
+
+.discountFood .prices{
+  font-size: 1.25vmin;
+ 
+}
+
+.discountFood .prices .main-price{
+  text-decoration: line-through;
+}
+
+.discountFood .buttons{
+  font-size: 1.25vmin;
+  border-bottom: 1px dashed #D3D3D3;
+  padding-bottom: 1.25%;
+  width: 100%;
+  text-align: center;
+}
+
+.discountFood .buttons .remained{
+display: inline-block;
+text-align: center;
+  border: 0.75px solid #D3D3D3;
+  padding: 0 0.8vmin;
+ 
+}
+
+.discountFood .buttons button{
+display: inline-block;
+text-align: center;
+  background-color: #4ECCC3;
+  padding: 0 1.9vmin;
+  
+}
+
+.discountFood .restaurantName{
+font-size:1.5vmin;
+  
+}
+
+#restaurants-container {
+  width:100%;
+  
+  text-align: left;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding-bottom: 8vmin;
+}
+
+#restaurants {
+  width:88%;
+  margin: 0 auto;
+  text-align: left;
+  display: flex;
+  flex-flow: row wrap;
+  
+  align-items: center;
+  justify-content: center;
+
+}
+
+.restaurant {
+box-shadow:-1px 1px 5px 0px rgba(224,221,224,1);
+ background-color: white;
+ text-align:center;
+ margin: 1vmin;
+}
+
+.restaurant img{
+   width: 9vmin;
+   margin:1vmin 0;
+}
+
+.restaurant .restaurantname{
+   font-size: 1.75vmin;
+   margin:1vmin 0;
+   padding: 0 1vmin;
+}
+
+.restaurant button{
+   font-size: 1.5vmin;
+   margin:1vmin 0;
+   background-color: #FFE66D;
+   padding: 0 1vmin;
+}
+
+#footer{
+    font-size: 1.5vmin;
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left:0;
+    background-color:#1A535C;
+    box-shadow: 0px 0 10px rgba(0, 0, 0, 0.5);
+    color:white;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	height:5vmin;
+}

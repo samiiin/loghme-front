@@ -41,7 +41,7 @@
 
 @media screen and (max-width: 900px) {
     .minus-plus div,.minus-plus i:before,.price{
-        font-size: 7px;
+        font-size: 5px;
     }
 
     .price{
@@ -57,7 +57,7 @@ html,body{
     margin: 0;
 }
 
-#wrapper{
+#root{
     min-height: 100%;
     position: relative;
 }
@@ -143,7 +143,7 @@ header div {
 .restaurant-name {
     position: relative;
     top:170%;
-    font-size: 2.5vmin;
+    font-size: 3vmin;
     font-family: vazir-medium;
 }
 
@@ -171,7 +171,7 @@ header div {
 
 .flex-container {
     margin-top: 30vmin;
-    /*margin-left: -10%;*/
+    margin-left: 4%;
     padding-right:2.2%;
     display: flex;
     flex-flow: row wrap;
@@ -195,6 +195,7 @@ header div {
 
 .food-image{
     width:50%;
+    height: 50%;
 }
 
 .food-name span{
@@ -216,6 +217,8 @@ header div {
     width:78%;
     margin:auto;
     font-size:1.25vmin;
+    outline: none!important;
+
 }
 
 .star{
@@ -235,6 +238,15 @@ header div {
 }
 
 .basket {
+    float: right;
+    background-color:white;
+    width:100%;
+    text-align: center;
+    padding-bottom: 2%;
+    border-radius: 5px;
+}
+
+#inpage{
     margin-top:29.5vmin;
     float: right;
     margin-right: 2.7%;
@@ -245,8 +257,8 @@ header div {
     text-align: center;
     padding-bottom: 2%;
     border-radius: 5px;
-}
 
+}
 
 .minus-plus{
     display: flex;
@@ -268,6 +280,7 @@ header div {
     color: red;
 }
 
+
 .minus-plus i:before {
     flex-grow: 1;
     font-style: normal;
@@ -280,7 +293,7 @@ header div {
     float: left;
     justify-content: center;
     flex-wrap: wrap;
-    width: 30%;
+    width: 40%;
     text-align:left;
 }
 
@@ -299,7 +312,8 @@ header div {
     justify-content: flex-end;
     border-bottom:1px solid #D3D3D3;
     margin-bottom:5%;
-    padding-bottom: 5%;
+    padding-bottom: 10%;
+    padding-top: 5%;
 }
 
 .order-name {
@@ -308,6 +322,8 @@ header div {
     color: #585858;
     font-weight: lighter;
     font-size: 2vmin;
+    width: 50%;
+
 
 }
 
@@ -347,15 +363,148 @@ header div {
     padding: 4%;
 }
 
+#basket-modal{
+    margin: auto;
+}
+
 .btn-confirm{
     background-color: #4ECCC3;
     border-radius:5px;
-    border: none;
     color: white;
     text-align: center;
     font-size: 2vmin;
     padding: 1vmin;
+    margin:auto;
+    outline: none!important;
 }
+
+
+.info-rname{
+    text-align:center;
+    font-size: 2.5vmin;
+}
+
+.food-image-info img{
+    width: 40%;
+    height: auto;
+}
+
+
+.food-image-info{
+    border-bottom: 1px dashed #D3D3D3;
+
+}
+
+.food-name-info{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.food-info-col{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-right: 2%;
+
+}
+
+
+
+.food-image-info{
+    padding-top: 2%;
+    padding-bottom: 2%;
+    padding-right: 5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.food-info{
+    width: 100%;
+}
+
+
+.food-info-col div{
+    text-align: right;
+    margin-left: 5%;
+    padding: 1%;
+
+}
+
+.food-info-col span{
+    font-size: 1.5vmin;
+    width: 8%;
+}
+.description{
+    font-size: 1.5vmin;
+    color: #909090;
+    display: flex;
+    flex-grow: 1;
+
+}
+
+.add-food-btn{
+    background-color: #4ECCC3;
+    border-radius:5px;
+    color: white;
+    text-align: center;
+    font-size: 1.3vmin;
+    padding: 0.5vmin;
+    margin-right: 5%;
+    outline: none!important;
+    width: 40%;
+
+}
+
+.minus-plus-info div{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin: 12%;
+    font-size: 2vmin;
+}
+
+.flaticon-minus {
+    color: red;
+}
+
+.minus-plus-info i:before {
+    font-style: normal;
+    margin: 0px;
+    font-size: 2vmin;
+}
+
+.minus-plus-info{
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items:center;
+    width: 30%;
+
+}
+
+.info-footer{
+    display: flex;
+    flex-direction: row;
+    justify-content:flex-end;
+    align-items: center;
+}
+
+
+.food-price-info{
+    display: flex;
+    flex-grow: 1;
+    font-size:1.9vmin;
+}
+
+
+
+
 
 #footer{
     font-size: 1.5vmin;

@@ -1,0 +1,284 @@
+@font-face {
+	src :url(../fonts/Vazir-Thin.ttf);
+	font-family: vazir-thin;
+}
+
+@font-face {
+	src :url(../fonts/Vazir-Medium.ttf);
+	font-family: vazir-medium;
+}
+
+* {
+	font-family: vazir-thin;
+}
+
+
+html,body{
+	height: 100%;
+	min-height: 100%;
+	background: #F7FFF7!important;
+
+}
+
+#wrapper{
+	min-height: 100%;
+	position: relative;
+
+}
+#content{
+	padding-bottom: 10%;
+}
+
+header{
+	top:0;
+	position:fixed;
+	z-index:1;
+	height:3vh;
+	width:100%;
+	background-color:white;
+}
+
+.header i:before{
+	box-sizing:border-box;
+	color: #515151;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	float: left;
+	font-style: normal;
+	font-size: 2vmin;
+	margin-left: 2%;
+}
+
+header div {
+	box-sizing:border-box;
+	height:100%;
+	float:left;
+	text-align:center;
+	color: #515151;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2vmin;
+	margin-left : 2%;
+}
+
+.exit {
+	color:#FBA1A1;
+
+}
+
+.logo-container {
+	float:right;
+	margin-top:0%;
+	margin-right:5%;
+}
+
+#logo {
+	display:inline-block;
+	height:100%;
+}
+
+.restaurant-logo-environment {
+	position: relative;
+	top:3vh;
+	background-color: #FF6B6B;
+	height: 14vmin;
+	width: 100%;
+	border: 1px solid red;
+	display: flex;
+	flex-flow: row;
+}
+
+.profileInformation{
+	width:40%;
+	height:100%;
+	margin-right:8%;
+	display:flex;
+	flex-flow: row;
+	align-items: center;
+	font-size:2.8vw;
+	color:white;
+}
+
+.contactUs{
+	width:40%;
+	height:70%;
+	display:flex;
+	flex-flow: column;
+	justify-content: center;
+	left: 0%;
+	position:absolute;
+	bottom:15%;
+	top:15%;
+
+}
+
+.contactUs div i:before{
+	font-style: normal;
+	font-size: 2vmin;
+	margin-bottom: 0;
+}
+
+.user-name {
+	font-family: vazir-medium;
+	font-size: 3vmin;
+}
+
+.contactUs div{
+	text-align:right;
+	font-size:2vmin;
+	color:white;
+}
+
+.profileInformation i:before{
+	flex-grow: 1;
+	font-style: normal;
+	color: white;
+	font-size: 6vmin;
+}
+
+
+
+.orders-box{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: white;
+	border: 0.5px solid #A9A9A9;
+	border-radius: 10px;
+	margin-left: 15%;
+	margin-right: 15%;
+	margin-top:calc(3vmin*-1);
+
+
+}
+
+.orders-table{
+	border-collapse:separate;
+	border-spacing: 0 3vmin;
+	width:80%;
+	margin-top: 5vmin;
+	margin-bottom: 3%;
+}
+
+tr{
+	background-color:#FBFBFB;
+}
+
+
+.number{
+	width:8%;
+	text-align: center;
+	border: 0.5px solid #A9A9A9;
+	border-left:none;
+	font-size:2vmin;
+}
+
+.name{
+	width:48%;
+	text-align: center;
+	border: 0.7px solid #A9A9A9;
+	border-left:none;
+	font-size:2vmin;
+}
+
+.inPath, .inSearch, .seeFactor{
+	width:44%;
+	text-align: center;
+	border: 0.7px solid #A9A9A9;
+}
+
+.inPath div{
+	width:50%;
+	height:50%;
+	background-color:#CDFFC7;
+	margin: 3%;
+	margin-right:25%;
+	font-size:1.5vmin;
+	border-radius:8%;
+}
+
+.inSearch div{
+	width:50%;
+	height:50%;
+	background-color:#D2FFFC;
+	margin: 3%;
+	margin-right:25%;
+	font-size:1.5vmin;
+	border-radius:8%;
+}
+
+.seeFactor div{
+	width:50%;
+	height:50%;
+	background-color:#FFE66D;
+	margin: 3%;
+	margin-right:25%;
+	font-size:1.5vmin;
+	border-radius:8%;
+}
+
+#tab{
+	margin-top:10vmin;
+	margin-left: auto;
+	margin-right: auto;
+	height:6vmin;
+	z-index:1;
+	width:50%;
+	display:flex;
+	flex-flow: row;
+}
+
+#tab .orders-tab{
+	margin:0;
+	width:50%;
+	background-color:#FF6B6B;
+	color:white;
+	text-align:center;
+	display:flex;
+	align-items:center;
+	justify-content: center;
+	-webkit-box-shadow: 0px 1.25px 5px 0px rgba(201,193,201,1);
+	-moz-box-shadow: 0px 1.25px 5px 0px rgba(201,193,201,1);
+	box-shadow: 0px 1.25px 5px 0px rgba(201,193,201,1);
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	font-size: 2vmin;
+}
+
+#tab .addCredit-tab{
+	margin:0;
+	width:50%;
+	background-color:white;
+	color:black;
+	text-align: center;
+	display:flex;
+	align-items:center;
+	justify-content: center;
+	-webkit-box-shadow: -1.5px 1.5px 5px 0px rgba(201,193,201,1);
+	-moz-box-shadow: -1.5px 1.5px 5px 0px rgba(201,193,201,1);
+	box-shadow: -1.5px 1.5px 5px 0px rgba(201,193,201,1);
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	font-size: 2vmin;
+}
+
+#footer{
+	font-size: 1.5vmin;
+	text-align: center;
+	width: 100%;
+    position: absolute;
+	bottom: 0;
+	background-color:#1A535C;
+	box-shadow: 0px 0 10px rgba(0, 0, 0, 0.5);
+	color:white;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	height:5vh;
+}
+
+a:link {
+	text-decoration: none;
+}
