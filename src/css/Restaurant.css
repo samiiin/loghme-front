@@ -18,7 +18,7 @@
     font-family: vazir;
 }
 
-* {
+*  {
     font-family: vazir-thin;
 }
 
@@ -62,60 +62,6 @@ html,body{
     position: relative;
 }
 
-.header div a{
-    text-decoration:none;
-    color:black;
-}
-
-header{
-    top:0;
-    position:fixed;
-    z-index:1;
-    height:3vh;
-    width:100%;
-    background-color:white;
-}
-
-.header i:before{
-    box-sizing:border-box;
-    color: #515151;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    float: left;
-    font-style: normal;
-    font-size: 2vmin;
-    margin-left: 2%;
-}
-
-header div {
-    box-sizing:border-box;
-    height:100%;
-    float:left;
-    text-align:center;
-    color: #515151;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2vmin;
-    margin-left : 2%;
-}
-
-.exit {
-    color:#FBA1A1;
-
-}
-
-.logo-container {
-    float:right;
-    margin-top:0%;
-    margin-right:5%;
-}
-
-#logo {
-    display:inline-block;
-    height:100%;
-}
 
 .restaurant-logo-environment {
     position: relative;
@@ -128,7 +74,6 @@ header div {
     flex-flow: row;
     justify-content: center;
 }
-
 
 .restaurant-logo{
     position: absolute;
@@ -501,10 +446,6 @@ header div {
     flex-grow: 1;
     font-size:1.9vmin;
 }
-
-
-
-
 
 #footer{
     font-size: 1.5vmin;

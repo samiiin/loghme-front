@@ -79,7 +79,7 @@ header div {
 	height:100%;
 }
 
-.restaurant-logo-environment {
+.user-environment {
 	position: relative;
 	top:3vh;
 	background-color: #FF6B6B;
@@ -183,13 +183,13 @@ tr{
 	font-size:2vmin;
 }
 
-.inPath, .inSearch, .seeFactor{
+.Delivering, .FindingDelivery, .Done{
 	width:44%;
 	text-align: center;
 	border: 0.7px solid #A9A9A9;
 }
 
-.inPath div{
+.Delivering div{
 	width:50%;
 	height:50%;
 	background-color:#CDFFC7;
@@ -199,7 +199,7 @@ tr{
 	border-radius:8%;
 }
 
-.inSearch div{
+.FindingDelivery div{
 	width:50%;
 	height:50%;
 	background-color:#D2FFFC;
@@ -209,7 +209,7 @@ tr{
 	border-radius:8%;
 }
 
-.seeFactor div{
+.Done div{
 	width:50%;
 	height:50%;
 	background-color:#FFE66D;
@@ -245,6 +245,7 @@ tr{
 	border-top-right-radius: 10px;
 	border-bottom-right-radius: 10px;
 	font-size: 2vmin;
+	cursor: pointer;
 }
 
 #tab .addCredit-tab{
@@ -262,6 +263,7 @@ tr{
 	border-top-left-radius: 10px;
 	border-bottom-left-radius: 10px;
 	font-size: 2vmin;
+	cursor: pointer;
 }
 
 #footer{
