@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import {Factor} from "./Factor";
 import logo from "./images/LOGO.png";
 import {Modal} from "react-bootstrap";
 import {CurrentBasket} from './restaurant'
+import {Credit} from "./Credit"
+import {Home} from "./Home"
 import './css/header.css';
 
 
@@ -14,6 +15,7 @@ export class Header extends React.Component{
         this.state = { ordinaryFoods:[],partyFoods:[],modalShow:false}
         this.getBasket = this.getBasket.bind(this)
         this.goToCredit = this.goToCredit.bind(this)
+        this.goTohome = this.goToHome.bind(this)
     }
 
 
@@ -24,15 +26,17 @@ export class Header extends React.Component{
                     ordinaryFoods : data.foods,
                     partyFoods : data.discountFoods,
                     modalShow: true
-
                 }
             )))
-
 
     }
 
     goToCredit(){
-        ReactDOM.render(<Factor />,document.getElementById("root"))
+        ReactDOM.render(<Credit />,document.getElementById("root"))
+    }
+
+    goToHome(){
+        ReactDOM.render(<Home />,document.getElementById("root"))
     }
 
     render() {
@@ -40,10 +44,10 @@ export class Header extends React.Component{
         return (
             <header className="header">
                 <div className="exit">خروج</div>
-                {(this.props.page==="restaurant")&&
+                {(this.props.page==="restaurant" || this.props.page==="home" )&&
                 <div id="Profile" onClick={this.goToCredit}>حساب کاربری</div>}
                 <i className="flaticon-smart-cart" onClick={this.getBasket}></i>
-                <div className="logo-container"><img src={logo} alt="Logo" id="logo" className="rounded mx-auto d-block"/>
+                <div className="logo-container"><img onClick={this.goToHome} src={logo} alt="Logo" id="logo" className="rounded mx-auto d-block"/>
                 </div>
 
                 <BasketModal

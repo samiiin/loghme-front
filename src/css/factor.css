@@ -20,7 +20,7 @@ html,body{
 
 }
 
-#wrapper{
+#root{
 	min-height: 100%;
 	position: relative;
 
@@ -284,3 +284,47 @@ tr{
 a:link {
 	text-decoration: none;
 }
+
+.order-modal-header,.order-modal-cell{
+	border: 1px solid #cecece;
+	border-collapse: collapse;
+	text-align: center;
+	font-size: 1.5vmin;
+	padding-top:1%;
+	padding-bottom:1% ;
+}
+.order-modal-header{
+	background-color: #EBEBEB;
+	color: #7e7e7e;
+}
+
+.order-modal-cell{
+	background-color: white;
+}
+.order-modal table{
+	width: 100%;
+}
+
+.order-restaurant-name{
+	text-align: center;
+	font-family: vazir-thin;
+	font-size: 2.5vmin;
+	margin-bottom: 3%;
+
+}
+
+.line{
+	border-bottom: 1px solid #D3D3D3;
+	margin-bottom: 4%;
+	width: 70%;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+.order-price{
+	margin-top: 3%;
+	font-family: vazir-medium;
+	font-size: 1.5vmin;
+	margin-left: 2%;
+}
+

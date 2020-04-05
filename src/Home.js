@@ -1,12 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import logo from './images/LOGO.png';
-/*import logo from './img/foodpizza.jpg';*/
-/*import logo from './img/star.png';
-import logo from './img/Restaurant.png';*/
-import './css/home.css'
+import './css/home.css';
 import {Restaurant} from './restaurant';
-
+import {Header} from './Header'
 
 
 export class Home extends React.Component {
@@ -20,7 +17,7 @@ export class Home extends React.Component {
       return (
   
        <div id="wrapper">
-        <Header />
+        <Header page="home"/>
         <HomeDescription />
         <FoodParty />
         <div id="restaurants-container">
@@ -79,20 +76,6 @@ export class RestaurantIcon extends React.Component{
 
       );
 
-    }
-}
-
-export class Header extends React.Component{
-    render() {
-        return(
-            <header className="header">
-                <div className="exit">خروج</div>
-                <div><a id="Profile" href="orders.html">حساب کاربری</a></div>
-                <i className="flaticon-smart-cart"></i>
-                <div className="logo-container"><img src={logo} alt="Logo" id="logo" className="rounded mx-auto d-block"/></div>
-            </header>
-
-        );
     }
 }
 
@@ -224,9 +207,6 @@ export class DiscountFood extends React.Component{
         );
 
     }
-
-
-
 
 }
 
