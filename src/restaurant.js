@@ -4,11 +4,12 @@ import './css/restaurant.css';
 import ReactDOM from "react-dom";
 import {Modal} from 'react-bootstrap'
 import {Header} from './Header'
+import {FoodParty, Home} from "./Home";
 
 export function CurrentBasket (divclass){
     var ordinaryFoods=[];
     var partyFoods=[];
-    fetch('http://localhost:8080/server_war/currentBasket')
+    fetch('http://localhost:8080/back_master_war_exploded/currentBasket')
         .then(resp => resp.json())
         .then(data => {
                 ordinaryFoods = data.foods
@@ -29,7 +30,7 @@ export class Restaurant extends React.Component{
 
 
     componentDidMount() {
-        fetch('http://localhost:8080/server_war/restaurantInfo/'+ this.state.id)
+        fetch('http://localhost:8080/back_master_war_exploded/restaurantInfo/'+ this.state.id)
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
                     name : data.name ,
@@ -121,7 +122,7 @@ class FoodModal extends React.Component {
                 },
                 body: queryString
             };
-            fetch('http://localhost:8080/server_war/buyFood', requestOptions)
+            fetch('http://localhost:8080/back_master_war_exploded/buyFood', requestOptions)
                 .then(response => response.json())
                 .then(data => {this.setState(prevState => ({status: data.status}))})
                 .then(data=>{
@@ -154,7 +155,7 @@ class FoodModal extends React.Component {
                                         <span><img src={star} className="star" alt="star"/>۵</span></div>
                                     <div className="description">{this.props.description}
                                     </div>
-                                    <div className="food-price-info" dir="rtl">{this.props.price}تومان</div>
+                                    <div className="food-price-info" dir="rtl"><span>{this.props.price}تومان</span></div>
                                 </div>
                         </div>
                         <div className="info-footer">
@@ -237,7 +238,7 @@ class Buy extends React.Component{
             },
             body: queryString
         };
-        fetch('http://localhost:8080/server_war/buyFood', requestOptions)
+        fetch('http://localhost:8080/back_master_war_exploded/buyFood', requestOptions)
             .then(response => response.json())
             .then(data => {this.setState(prevState => ({status: data.status}))})
             .then(data=>{
@@ -280,7 +281,7 @@ class BasketRow extends React.Component{
             },
             body: queryString
         };
-        fetch('http://localhost:8080/server_war/'+path, requestOptions)
+        fetch('http://localhost:8080/back_master_war_exploded/'+path, requestOptions)
             .then(response => response.json())
             .then(data => {this.setState(prevState => ({status: data.status,message:data.message}
             ))})
@@ -343,7 +344,7 @@ class Basket extends React.Component{
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
         };
-        fetch('http://localhost:8080/server_war/finalizeOrder',requestOptions)
+        fetch('http://localhost:8080/back_master_war_exploded/finalizeOrder',requestOptions)
             .then(response => response.json())
             .then(data => {this.setState(prevState => ({status: data.status,message:data.message}
             ))})
@@ -351,6 +352,7 @@ class Basket extends React.Component{
                     window.alert(this.state.message)
             })
             .then(()=>CurrentBasket("basket-container"))
+
 
 
     }

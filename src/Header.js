@@ -4,7 +4,7 @@ import logo from "./images/LOGO.png";
 import {Modal} from "react-bootstrap";
 import {CurrentBasket} from './restaurant'
 import {Credit} from "./Credit"
-import {Home} from "./Home"
+import {Home} from "./Home";
 import './css/header.css';
 
 
@@ -20,7 +20,7 @@ export class Header extends React.Component{
 
 
     getBasket() {
-        fetch('http://localhost:8080/server_war/currentBasket')
+        fetch('http://localhost:8080/back_master_war_exploded/currentBasket')
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
                     ordinaryFoods : data.foods,

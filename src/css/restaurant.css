@@ -356,7 +356,8 @@ html,body{
     padding-right: 5%;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    flex-flow: wrap;
+    /*justify-content: flex-start;*/
 }
 
 .food-info{
@@ -434,8 +435,20 @@ html,body{
 
 .food-price-info{
     display: flex;
-    flex-grow: 1;
+    flex-direction: row;
+    flex-flow: wrap;
+    justify-content: space-around;
+    /*flex-grow: 1;*/
     font-size:1.9vmin;
+}
+
+.food-price-info span{
+    margin-left: 2vmin;
+}
+
+.old-Price{
+    text-decoration: line-through;
+    text-decoration-color:red;
 }
 
 #footer{
