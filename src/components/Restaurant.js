@@ -1,23 +1,24 @@
 import React from 'react';
-import star from './images/star.png'
-import './css/restaurant.css';
+import star from '../images/star.png'
+import '../css/restaurant.css';
 import ReactDOM from "react-dom";
-import {Modal} from 'react-bootstrap'
+import {FoodModal} from './FoodModal'
 import {Header} from './Header'
-import {FoodParty, Home} from "./Home";
 
 export function CurrentBasket (divclass){
     var ordinaryFoods=[];
     var partyFoods=[];
-    fetch('http://localhost:8080/back_master_war_exploded/currentBasket')
+    fetch('http://localhost:8080/IE/currentBasket')
         .then(resp => resp.json())
         .then(data => {
                 ordinaryFoods = data.foods
                 partyFoods = data.discountFoods
                 var x=document.getElementsByClassName(divclass)
             var i;
-            for (i = 0; i < x.length; i++)
-                ReactDOM.render(<Basket ordinary={ordinaryFoods} party={partyFoods}/>,document.getElementsByClassName(divclass)[i])
+            for (i = 0; i < x.length; i++) {
+                ReactDOM.render(<Basket ordinary={ordinaryFoods}
+                                        party={partyFoods}/>, document.getElementsByClassName(divclass)[i])
+            }
             }
         )
 }
@@ -30,7 +31,7 @@ export class Restaurant extends React.Component{
 
 
     componentDidMount() {
-        fetch('http://localhost:8080/back_master_war_exploded/restaurantInfo/'+ this.state.id)
+        fetch('http://localhost:8080/IE/restaurantInfo/'+ this.state.id)
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
                     name : data.name ,
@@ -51,6 +52,7 @@ export class Restaurant extends React.Component{
                 <Header page="restaurant" />
                 <RestaurantLogo name={this.state.name} logo={this.state.logo}/>
                 <div className="foodTitle"><span>منوی غذا</span></div>
+                <div id="food-basket">
                 <div class="basket-container" id="inpage"></div>
                 {CurrentBasket("basket-container")}
                 <div className="flex-container">
@@ -59,7 +61,7 @@ export class Restaurant extends React.Component{
                         }
                     )}
                 </div>
-
+                </div>
                 <div id="footer">
                     &copy; تمامی حقوق متعلق به لقمه است
                 </div>
@@ -76,100 +78,6 @@ class RestaurantLogo extends React.Component{
                 <img src={this.props.logo} className="restaurant-logo" alt="logo"/>
                 <div className="restaurant-name">{this.props.name}</div>
             </div>
-        );
-    }
-}
-
-
-class FoodModal extends React.Component {
-    constructor() {
-        super();
-        this.state = {count:0}
-        this.increase = this.increase.bind(this)
-        this.decrease = this.decrease.bind(this)
-        this.addFood = this.addFood.bind(this)
-    }
-
-    increase(){
-        this.setState({count:this.state.count+1})
-    }
-
-    decrease(){
-        if(this.state.count>0){
-            this.setState({count:this.state.count-1})
-
-        }
-    }
-
-    addFood(){
-        if(this.state.count<=0){
-            window.alert("غذایی انتخاب نشده است!")
-        }
-        else{
-            var params = {
-                "id": this.props.rid,
-                "food" : this.props.name,
-                "count" :this.state.count
-            };
-            var queryString = Object.keys(params).map(function(key) {
-                return key + '=' + params[key]
-            }).join('&');
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'content-length' : queryString.length,
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                },
-                body: queryString
-            };
-            fetch('http://localhost:8080/back_master_war_exploded/buyFood', requestOptions)
-                .then(response => response.json())
-                .then(data => {this.setState(prevState => ({status: data.status}))})
-                .then(data=>{
-                    if(this.state.status !== 200)
-                        window.alert("غذا از رستوران دیگری انتخاب شده")
-                })
-                .then(()=>CurrentBasket("basket-container"))
-                .then(this.setState({count:0}))
-
-        }
-
-    }
-
-    render() {
-        return (
-            <Modal
-                {...this.props}
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-                id="food-info-modal"
-            >
-                <Modal.Body id="contained-modal-title-vcenter">
-                    <div className="food-info">
-                        <div className="info-rname">{this.props.rname}</div>
-                        <div className="food-image-info">
-                            <img src={this.props.fimage} alt="Logo" id="logo" className="rounded "/>
-                                <div className="food-info-col">
-                                    <div className="food-name-info">
-                                        <div>{this.props.name}</div>
-                                        <span><img src={star} className="star" alt="star"/>۵</span></div>
-                                    <div className="description">{this.props.description}
-                                    </div>
-                                    <div className="food-price-info" dir="rtl"><span>{this.props.price}تومان</span></div>
-                                </div>
-                        </div>
-                        <div className="info-footer">
-
-                            <div className="minus-plus-info"><i className="flaticon-plus" onClick={this.increase}></i>
-                                <div>{this.state.count}</div>
-                                <i className="flaticon-minus" onClick={this.decrease}></i></div>
-                            <button type="button" className="add-food-btn" onClick={this.addFood}>اضافه کردن به سبدخرید</button>
-                        </div>
-                    </div>
-
-                </Modal.Body>
-            </Modal>
-
         );
     }
 }
@@ -193,13 +101,13 @@ class Food extends React.Component{
         let modalClose = () => this.setState({modalShow:false})
         return(
             <div className="panel-body rounded" >
-                <img class="food-image" onClick={this.showDetail} src={this.props.fimage} className="food-image img-responsive rounded mx-auto d-block"
+                <img class="food-image" onClick={this.showDetail} src={this.props.fimage} className="food-image rounded"
                      alt="food"/>
                 <div class="food-name"><b>{this.props.name} </b><span> &nbsp;{this.props.popularity}</span> <img src={star} className="star" alt="star"/></div>
                 <div class="food-price" dir="rtl">{this.props.price}تومان </div>
                 <Buy rid={this.props.rid} food={this.props.name}/>
-                <FoodModal show={this.state.modalShow} onHide={modalClose} rid={this.props.rid} rname={this.props.rname}  popularity={this.props.popularity} price={this.props.price} fimage={this.props.fimage}
-                           description={this.props.description} name={this.props.name}/>
+                <FoodModal show={this.state.modalShow} onHide={modalClose} rid={this.props.rid} rname={this.props.rname}  popularity={this.props.popularity} price={this.props.price} image={this.props.fimage}
+                           type="ordinary" description={this.props.description} name={this.props.name}/>
             </div>
 
         );
@@ -238,7 +146,7 @@ class Buy extends React.Component{
             },
             body: queryString
         };
-        fetch('http://localhost:8080/back_master_war_exploded/buyFood', requestOptions)
+        fetch('http://localhost:8080/IE/buyFood', requestOptions)
             .then(response => response.json())
             .then(data => {this.setState(prevState => ({status: data.status}))})
             .then(data=>{
@@ -281,7 +189,7 @@ class BasketRow extends React.Component{
             },
             body: queryString
         };
-        fetch('http://localhost:8080/back_master_war_exploded/'+path, requestOptions)
+        fetch('http://localhost:8080/IE/'+path, requestOptions)
             .then(response => response.json())
             .then(data => {this.setState(prevState => ({status: data.status,message:data.message}
             ))})
@@ -344,7 +252,7 @@ class Basket extends React.Component{
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
         };
-        fetch('http://localhost:8080/back_master_war_exploded/finalizeOrder',requestOptions)
+        fetch('http://localhost:8080/IE/finalizeOrder',requestOptions)
             .then(response => response.json())
             .then(data => {this.setState(prevState => ({status: data.status,message:data.message}
             ))})
@@ -352,7 +260,6 @@ class Basket extends React.Component{
                     window.alert(this.state.message)
             })
             .then(()=>CurrentBasket("basket-container"))
-
 
 
     }
@@ -383,5 +290,4 @@ class Basket extends React.Component{
         );
 
     }
-
 }

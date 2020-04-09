@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './css/credit.css';
+import '../css/credit.css';
 import {Factor} from './Factor';
 import {Header} from './Header'
 export class Credit extends React.Component {
@@ -21,7 +21,7 @@ export class Credit extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/back_master_war_exploded/getUser')
+        fetch('http://localhost:8080/IE/getUser')
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
                     name: data.name,
@@ -99,7 +99,7 @@ export class CreditTab extends React.Component{
             body: queryString
         };
 
-        fetch('http://localhost:8080/back_master_war_exploded/addCredit', requestOptions)
+        fetch('http://localhost:8080/IE/addCredit', requestOptions)
             .then(response => response.json())
             .then(data => ReactDOM.render(<>{data.credit} تومان </>,document.getElementById('credit'))
             );

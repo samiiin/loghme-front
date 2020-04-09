@@ -45,7 +45,7 @@ export class Credit extends React.Component {
 
 
         fetchUser(){
-                fetch('http://localhost:8080/back_master_war_exploded/getUser')
+                fetch('http://localhost:8080/IE/getUser')
                     .then(resp => resp.json())
                     .then(data => this.setState(prevState => ({
                           name: data.name,
@@ -142,7 +142,7 @@ export class Credittab extends React.Component{
             	        body: queryString
             	    };
 
-            	    fetch('http://localhost:8080/back_master_war_exploded/addCredit', requestOptions)
+            	    fetch('http://localhost:8080/IE/addCredit', requestOptions)
             	        .then(response => response.json())
             	        .then(data => ReactDOM.render(<>{data.credit} تومان </>,document.getElementById('x'))
             	        );

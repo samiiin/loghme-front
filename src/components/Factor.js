@@ -1,6 +1,6 @@
 import React from 'react';
 import {Header} from './Header'
-import './css/factor.css'
+import '../css/factor.css'
 import {Modal} from "react-bootstrap";
 import ReactDOM from "react-dom";
 import {UserInf,Credit} from "./Credit"
@@ -20,7 +20,7 @@ export class Factor extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/back_master_war_exploded/getUser')
+        fetch('http://localhost:8080/IE/getUser')
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
                     name: data.name,
@@ -69,7 +69,7 @@ export class Table extends React.Component{
     }
 
     fetchOrders(){
-        fetch('http://localhost:8080/back_master_war_exploded/getOrders')
+        fetch('http://localhost:8080/IE/getOrders')
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
                     orders: data,

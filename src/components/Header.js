@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import logo from "./images/LOGO.png";
+import logo from "../images/LOGO.png";
 import {Modal} from "react-bootstrap";
-import {CurrentBasket} from './restaurant'
+import {CurrentBasket} from './Restaurant'
 import {Credit} from "./Credit"
-import {Home} from "./Home";
-import './css/header.css';
+import {Home} from "./Home"
+import {foodPartySet} from "./Home";
+import '../css/header.css';
 
 
 export class Header extends React.Component{
@@ -13,22 +14,14 @@ export class Header extends React.Component{
     constructor() {
         super();
         this.state = { ordinaryFoods:[],partyFoods:[],modalShow:false}
-        this.getBasket = this.getBasket.bind(this)
+        this.showBasket = this.showBasket.bind(this)
         this.goToCredit = this.goToCredit.bind(this)
         this.goTohome = this.goToHome.bind(this)
     }
 
 
-    getBasket() {
-        fetch('http://localhost:8080/back_master_war_exploded/currentBasket')
-            .then(resp => resp.json())
-            .then(data => this.setState(prevState => ({
-                    ordinaryFoods : data.foods,
-                    partyFoods : data.discountFoods,
-                    modalShow: true
-                }
-            )))
-
+    showBasket() {
+        this.setState(prevState => ({modalShow: true}))
     }
 
     goToCredit(){
@@ -40,21 +33,28 @@ export class Header extends React.Component{
     }
 
     render() {
-        let modalClose = () => this.setState({modalShow:false})
+        let modalClose
+        if(this.props.page === "home") {
+            modalClose = () => {
+                this.setState({modalShow: false});
+                foodPartySet("party-box");
+            }
+        }
+        else {
+            modalClose = () => this.setState({modalShow:false})
+        }
         return (
             <header className="header">
                 <div className="exit">خروج</div>
-                {(this.props.page==="restaurant" || this.props.page==="home" )&&
+                {(this.props.page==="restaurant")&&
                 <div id="Profile" onClick={this.goToCredit}>حساب کاربری</div>}
-                <i className="flaticon-smart-cart" onClick={this.getBasket}></i>
+                <i className="flaticon-smart-cart" onClick={this.showBasket}></i>
                 <div className="logo-container"><img onClick={this.goToHome} src={logo} alt="Logo" id="logo" className="rounded mx-auto d-block"/>
                 </div>
 
                 <BasketModal
                     show={this.state.modalShow}
                     onHide={modalClose}
-                    ordinary={this.state.ordinaryFoods}
-                    party={this.state.partyFoods}
                 />
 
             </header>

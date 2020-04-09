@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Home} from './Home';
+import {Login} from './components/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 ReactDOM.render(
-    <Home />,
+    <Login />,
     document.getElementById('root')
 );
 

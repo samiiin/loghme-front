@@ -18,7 +18,7 @@
     font-family: vazir;
 }
 
-*  {
+* {
     font-family: vazir-thin;
 }
 
@@ -41,7 +41,7 @@
 
 @media screen and (max-width: 900px) {
     .minus-plus div,.minus-plus i:before,.price{
-        font-size: 5px;
+        font-size: 7px;
     }
 
     .price{
@@ -60,7 +60,9 @@ html,body{
 #root{
     min-height: 100%;
     position: relative;
+    width: 100%;
 }
+
 
 
 .restaurant-logo-environment {
@@ -74,6 +76,7 @@ html,body{
     flex-flow: row;
     justify-content: center;
 }
+
 
 .restaurant-logo{
     position: absolute;
@@ -98,7 +101,7 @@ html,body{
     font-size: 3vmin;
     font-weight: lighter;
     padding-right:1%;
-    left:3.6%;
+    left:3%;
     width:65%;
     display: flex;
     justify-content: center;
@@ -111,25 +114,52 @@ html,body{
     text-align:center;
     padding:0 1%;
     width:28%;
-    left:37%;
+    left:36.1%;
 }
 
 .flex-container {
-    margin-top: 30vmin;
-    margin-left: 4%;
-    padding-right:2.2%;
+    padding-right: 3%;
+    padding-left: 3%;
+    padding-top: 1vmin;
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-start;
-    width:64%;
+    width:68%;
     border-right: 1px dashed #D3D3D3;
     padding-bottom: 8vmin;
 
 }
 
-.panel-body{
+#food-basket{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-end;
+    margin-top: 30vmin;
+    width: 100%;
+    padding-bottom: 10vmin;
+}
+
+#inpage{
+    width: 25%;
+    margin-left: 3%;
     box-shadow:-1px 1px 5px 0px rgba(224,221,224,1);
-    padding:3%;
+}
+
+.basket {
+    background-color:white;
+
+    width:100%;
+    text-align: center;
+    padding-bottom: 2%;
+    border-radius: 5px;
+}
+
+.panel-body{
+    position: relative;
+    left: 2%;
+    box-shadow:-1px 1px 5px 0px rgba(224,221,224,1);
+    padding:1%;
     width:30%;
     margin:1.5%;
     margin-bottom:5%;
@@ -139,16 +169,18 @@ html,body{
 
 
 .food-image{
-    width:50%;
+    margin-top: 2%;
     height: 50%;
+    width: 50%;
 }
 
 .food-name span{
-    font-size: 1.2vmin;
+    font-size: 1vmin;
 }
 
 .food-name{
-    font-size: 1.5vmin;
+    margin-top: 2%;
+    font-size: 1.4vmin;
 }
 
 
@@ -160,10 +192,8 @@ html,body{
 .food-cart-add{
     background-color:#FFE66D;
     width:78%;
-    margin:auto;
     font-size:1.25vmin;
     outline: none!important;
-
 }
 
 .star{
@@ -182,28 +212,6 @@ html,body{
     margin: 20px;
 }
 
-.basket {
-    float: right;
-    background-color:white;
-    width:100%;
-    text-align: center;
-    padding-bottom: 2%;
-    border-radius: 5px;
-}
-
-#inpage{
-    margin-top:29.5vmin;
-    float: right;
-    margin-right: 2.7%;
-    margin-left: 2.7%;
-    background-color:white;
-    box-shadow:-1px 1px 5px 0px rgba(224,221,224,1);
-    width:25%;
-    text-align: center;
-    padding-bottom: 2%;
-    border-radius: 5px;
-
-}
 
 .minus-plus{
     display: flex;
@@ -245,14 +253,13 @@ html,body{
 .price {
     color: #585858;
     text-align: center;
-    font-size:0.88vw;
+    font-size:0.87vw;
 }
 
 .row-group{
     position: relative;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
     border-bottom:1px solid #D3D3D3;
@@ -268,10 +275,7 @@ html,body{
     font-weight: lighter;
     font-size: 2vmin;
     width: 50%;
-
-
 }
-
 
 
 .basket-title{
@@ -314,74 +318,23 @@ html,body{
     padding: 1vmin;
     margin:auto;
     outline: none!important;
+    margin-bottom: 2vmin;
 }
 
-
-.info-rname{
-    text-align:center;
-    font-size: 2.5vmin;
-}
-
-.food-image-info img{
-    width: 40%;
-    height: auto;
-}
-
-
-.food-image-info{
-    border-bottom: 1px dashed #D3D3D3;
-
-}
-
-.food-name-info{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    flex-grow: 1;
-}
-
-.food-info-col{
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    flex-direction: column;
-    margin-right: 2%;
-
-}
-
-.food-image-info{
-    padding-top: 2%;
-    padding-bottom: 2%;
-    padding-right: 5%;
-    display: flex;
-    flex-direction: row;
-    flex-flow: wrap;
-    /*justify-content: flex-start;*/
-}
-
-.food-info{
+#footer{
+    font-size: 1.5vmin;
+    text-align: center;
+    position: absolute;
     width: 100%;
-}
-
-
-.food-info-col div{
-    text-align: right;
-    margin-left: 5%;
-    padding: 1%;
-
-}
-
-.food-info-col span{
-    font-size: 1.5vmin;
-    width: 8%;
-}
-.description{
-    font-size: 1.5vmin;
-    color: #909090;
-    display: flex;
-    flex-grow: 1;
-
+    bottom: 0;
+    left:0;
+    background-color:#1A535C;
+    box-shadow: 0px 0 10px rgba(0, 0, 0, 0.5);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:5vmin;
 }
 
 .add-food-btn{
@@ -432,40 +385,14 @@ html,body{
     align-items: center;
 }
 
-
 .food-price-info{
     display: flex;
     flex-direction: row;
-    flex-flow: wrap;
+    flex-grow: 1;
     justify-content: space-around;
-    /*flex-grow: 1;*/
     font-size:1.9vmin;
 }
 
 .food-price-info span{
     margin-left: 2vmin;
 }
-
-.old-Price{
-    text-decoration: line-through;
-    text-decoration-color:red;
-}
-
-#footer{
-    font-size: 1.5vmin;
-    text-align: center;
-    position: absolute;
-    width: 100%;
-    bottom: 0;
-    left:0;
-    background-color:#1A535C;
-    box-shadow: 0px 0 10px rgba(0, 0, 0, 0.5);
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    height:5vmin;
-}
-
-
-
