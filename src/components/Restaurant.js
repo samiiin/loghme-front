@@ -4,33 +4,43 @@ import '../css/restaurant.css';
 import ReactDOM from "react-dom";
 import {FoodModal} from './FoodModal'
 import {Header} from './Header'
+import {Spinner} from './Spinner'
 
 export function CurrentBasket (divclass){
     var ordinaryFoods=[];
     var partyFoods=[];
+    var x=document.getElementsByClassName(divclass)
+    var i;
+    for (i = 0; i < x.length; i++) {
+        ReactDOM.render(<div className="basket"><div className="basket-title">سبد خرید</div><div className="orders-container"><Spinner /></div></div>, document.getElementsByClassName(divclass)[i])
+    }
     fetch('http://localhost:8080/IE/currentBasket')
         .then(resp => resp.json())
         .then(data => {
                 ordinaryFoods = data.foods
                 partyFoods = data.discountFoods
                 var x=document.getElementsByClassName(divclass)
-            var i;
-            for (i = 0; i < x.length; i++) {
-                ReactDOM.render(<Basket ordinary={ordinaryFoods}
-                                        party={partyFoods}/>, document.getElementsByClassName(divclass)[i])
-            }
+                for (i = 0; i < x.length; i++) {
+                    ReactDOM.render(<Basket ordinary={ordinaryFoods}
+                                            party={partyFoods}/>, document.getElementsByClassName(divclass)[i])
+                }
             }
         )
 }
 
+/*export function Spinner () {
+    return  <div className = "spinner-border text-secondar" role = "status"><span className = "sr-only" > Loading...</span></div>
+}*/
+
 export class Restaurant extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {name: null, logo: null , location:null , menu:[], id : this.props.id ,};
+        this.state = {name: null, logo: null , location:null , menu:[], id : this.props.id ,loading:false};
     }
 
 
     componentDidMount() {
+        this.setState({loading : true})
         fetch('http://localhost:8080/IE/restaurantInfo/'+ this.state.id)
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
@@ -38,29 +48,36 @@ export class Restaurant extends React.Component{
                     logo : data.logo,
                     location : data.location,
                     menu : data.menu,
-                    id : this.props.id
+                    id : this.props.id,
+                    loading : false
                 }
-            )));
+            )))
 
     }
 
     render() {
         var id = this.state.id
         var name = this.state.name
+        var loading = this.state.loading
         return(
             <div >
                 <Header page="restaurant" />
-                <RestaurantLogo name={this.state.name} logo={this.state.logo}/>
+                {!this.state.loading && <RestaurantLogo name={this.state.name} logo={this.state.logo}/>}
+                {this.state.loading && <div className="restaurant-logo-environment"><Spinner/></div>}
                 <div className="foodTitle"><span>منوی غذا</span></div>
                 <div id="food-basket">
-                <div class="basket-container" id="inpage"></div>
-                {CurrentBasket("basket-container")}
-                <div className="flex-container">
-                    {this.state.menu.map(function (menu,index) {
-                            return <Food  rname={name} rid={id} name={menu.name} popularity={menu.popularity} price={menu.price} fimage={menu.image} description={menu.description}/>
-                        }
-                    )}
-                </div>
+                    <div class="basket-container" id="inpage"></div>
+                    {CurrentBasket("basket-container")}
+                    <div className="flex-container">
+                        {this.state.menu.map(function (menu,index) {
+                                if(loading) {
+                                    return <div className="panel-body rounded"><Spinner/></div>
+                                }
+                                else
+                                    return <Food  rname={name} rid={id}  name={menu.name} popularity={menu.popularity} price={menu.price} fimage={menu.image} description={menu.description}/>
+                            }
+                        )}
+                    </div>
                 </div>
                 <div id="footer">
                     &copy; تمامی حقوق متعلق به لقمه است
@@ -207,14 +224,14 @@ class BasketRow extends React.Component{
             return(
                 <div className="row-group">
                     <div className="order-name"><small>{this.props.name}</small></div>
-                <div className="column-group">
-                    <div className="minus-plus"><i className="flaticon-plus" onClick={()=>this.handleClick("buyFood")}></i>
-                        <div>{this.props.count}</div>
-                        <i className="flaticon-minus" onClick={()=>this.handleClick("decreaseOrdinaryFood")}></i>
+                    <div className="column-group">
+                        <div className="minus-plus"><i className="flaticon-plus" onClick={()=>this.handleClick("buyFood")}></i>
+                            <div>{this.props.count}</div>
+                            <i className="flaticon-minus" onClick={()=>this.handleClick("decreaseOrdinaryFood")}></i>
+                        </div>
+                        <div className="price">{this.props.price * this.props.count}تومان</div>
                     </div>
-                    <div className="price">{this.props.price * this.props.count}تومان</div>
                 </div>
-            </div>
             );
         }
         else{
@@ -257,7 +274,7 @@ class Basket extends React.Component{
             .then(data => {this.setState(prevState => ({status: data.status,message:data.message}
             ))})
             .then(data=>{
-                    window.alert(this.state.message)
+                window.alert(this.state.message)
             })
             .then(()=>CurrentBasket("basket-container"))
 
@@ -291,5 +308,3 @@ class Basket extends React.Component{
 
     }
 }
-
-//

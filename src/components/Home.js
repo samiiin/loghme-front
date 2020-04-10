@@ -8,13 +8,14 @@ import {Header} from './Header'
 import {Spinner} from './Spinner'
 
 export function foodPartySet (id){
-    //window.alert("fparty")
-    fetch('http://localhost:8080/IE/DiscountFoods')
-        .then(resp => resp.json())
-        .then(data => {
-                ReactDOM.render(<FoodParty discounts={data} loading={false} />,document.getElementById(id))
-            }
-        )
+    if(document.getElementById("party-box")) {
+        fetch('http://localhost:8080/IE/DiscountFoods')
+            .then(resp => resp.json())
+            .then(data => {
+                    ReactDOM.render(<FoodParty discounts={data} loading={false}/>, document.getElementById(id))
+                }
+            )
+    }
 }
 
 
@@ -162,11 +163,9 @@ export class PartyFoods extends React.Component{
 export class FoodPartyContainer extends React.Component{
     render() {
         if(this.props.loading){
-            //window.alert("we")
             return <Spinner />
         }
         else{
-            //window.alert("us")
             return <PartyFoods discountfoods={this.props.discountfoods} />
         }
     }
@@ -184,24 +183,27 @@ export class FoodParty extends React.Component{
     }
     render(){
         var discountfoods = this.props.discounts;
-        let loadingAttr;
+        let loadingAttr = false;
         if(this.state.loading){
             loadingAttr = true;
             this.setState({loading: false,})
         }
-        else if(this.props.loading == false){
+        /*else if(this.props.loading == false){
             loadingAttr = false;
-        }
-        /*if(loadingAttr == true){
-            return <Spinner />
         }*/
-        //window.alert("ttt")
+        if(loadingAttr == true){
+            return <Spinner />
+        }
+
         return(
             <div id="food-party">
                 <div class="titre">جشن غذا!</div>
                 <div class="rounded timer">زمان باقی مانده: &nbsp;<span >{Math.floor((this.state.time) / 60)}</span>:<span>{(this.state.time) % 60}</span>&nbsp;</div>
                 <div className="scrollmenu">
-                    <FoodPartyContainer loading={loadingAttr} discountfoods={discountfoods}/>
+                    {discountfoods.map(function (discountfoods, index) {
+                            return <DiscountFood discountfood={discountfoods}/>
+                        }
+                    )}
                 </div>
             </div>
         );
@@ -220,14 +222,11 @@ export class FoodParty extends React.Component{
     componentDidMount() {
         this.setState({loading: true,})
         foodPartySet("party-box")
-
         this.getTime()
         this.myInterval = setInterval(() => {
             if(document.getElementById("party-box")) {
                 this.getTime()
                 if (this.state.time === 85 || this.state.time === 1) {
-                    this.setState({loading: true,})
-                    //setTimeout(()=>{foodPartySet("party-box")},2000)
                     foodPartySet("party-box")
                 }
             }
