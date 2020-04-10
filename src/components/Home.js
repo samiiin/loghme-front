@@ -188,10 +188,8 @@ export class FoodParty extends React.Component{
             loadingAttr = true;
             this.setState({loading: false,})
         }
-        /*else if(this.props.loading == false){
-            loadingAttr = false;
-        }*/
-        if(loadingAttr == true){
+
+        if(loadingAttr === true){
             return <Spinner />
         }
 
