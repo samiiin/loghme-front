@@ -9,17 +9,13 @@ import {Spinner} from './Spinner'
 export function CurrentBasket (divclass){
     var ordinaryFoods=[];
     var partyFoods=[];
-    var x=document.getElementsByClassName(divclass)
-    var i;
-    for (i = 0; i < x.length; i++) {
-        ReactDOM.render(<div className="basket"><div className="basket-title">سبد خرید</div><div className="orders-container"><Spinner /></div></div>, document.getElementsByClassName(divclass)[i])
-    }
     fetch('http://localhost:8080/IE/currentBasket')
         .then(resp => resp.json())
         .then(data => {
                 ordinaryFoods = data.foods
                 partyFoods = data.discountFoods
                 var x=document.getElementsByClassName(divclass)
+                var i;
                 for (i = 0; i < x.length; i++) {
                     ReactDOM.render(<Basket ordinary={ordinaryFoods}
                                             party={partyFoods}/>, document.getElementsByClassName(divclass)[i])
@@ -69,12 +65,9 @@ export class Restaurant extends React.Component{
                     <div class="basket-container" id="inpage"></div>
                     {CurrentBasket("basket-container")}
                     <div className="flex-container">
-                        {this.state.menu.map(function (menu,index) {
-                                if(loading) {
-                                    return <div className="panel-body rounded"><Spinner/></div>
-                                }
-                                else
-                                    return <Food  rname={name} rid={id}  name={menu.name} popularity={menu.popularity} price={menu.price} fimage={menu.image} description={menu.description}/>
+                        {loading && <div id="restaurantSpinner"><Spinner/></div>}
+                        {!loading && this.state.menu.map(function (menu,index) {
+                                return <Food  rname={name} rid={id}  name={menu.name} popularity={menu.popularity} price={menu.price} fimage={menu.image} description={menu.description}/>
                             }
                         )}
                     </div>
