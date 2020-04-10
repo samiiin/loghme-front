@@ -21,7 +21,7 @@ export class Credit extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/IE/getUser')
+        fetch('http://localhost:8080/IE/User')
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
                     name: data.name,
@@ -122,6 +122,8 @@ export class CreditTab extends React.Component{
         );
     }
 }
+
+//
 
 
 

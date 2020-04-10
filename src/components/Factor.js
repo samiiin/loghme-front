@@ -20,7 +20,7 @@ export class Factor extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/IE/getUser')
+        fetch('http://localhost:8080/IE/User')
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
                     name: data.name,
@@ -69,7 +69,7 @@ export class Table extends React.Component{
     }
 
     fetchOrders(){
-        fetch('http://localhost:8080/IE/getOrders')
+        fetch('http://localhost:8080/IE/Orders')
             .then(resp => resp.json())
             .then(data => this.setState(prevState => ({
                     orders: data,
@@ -201,3 +201,4 @@ export class Order extends React.Component{
     }
 }
 
+//
