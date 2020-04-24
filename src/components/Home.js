@@ -176,7 +176,6 @@ export class SearchResult extends React.Component{
             .then(data => {
                     this.setState({page :this.state.page+1 ,loading:false,restaurants : this.state.restaurants.concat(data)})
                     if (data.length < this.state.limit) {
-                        window.alert(data.length+" "+this.state.limit)
                         this.setState({morePage: false})
                     }
 
