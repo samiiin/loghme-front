@@ -87,10 +87,10 @@ export class RestaurantContainer extends React.Component{
         }
         else{
             return(
-                <div>
+                <>
                     <Restaurants restaurants={this.state.restaurants}/>
                     {this.state.morePage && <button class="more-restaurants" onClick={this.fetchData}>بیشتر</button>}
-                </div>
+                </>
 
             )
 
@@ -136,12 +136,79 @@ export class RestaurantIcon extends React.Component{
 }
 
 export class SearchResult extends React.Component{
+    constructor() {
+        super();
+        this.state={
+            restaurants:[],
+            page:1,
+            limit:16,
+            loading:true,
+            morePage :true
+        }
+        this.fetchData = this.fetchData.bind(this)
+
+    }
+
+    fetchData(){
+
+        this.setState({loading:true})
+        var params = {
+            "food": this.props.food,
+            "restaurant": this.props.restaurant,
+            "page": this.state.page,
+            "limit":this.state.limit
+        };
+
+
+        var queryString = Object.keys(params).map(function(key) {
+            return key + '=' + params[key]
+        }).join('&');
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'content-length' : queryString.length,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: queryString
+        };
+        fetch('http://localhost:8080/IE/search', requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                    this.setState({page :this.state.page+1 ,loading:false,restaurants : this.state.restaurants.concat(data)})
+                    if (data.length < this.state.limit) {
+                        window.alert(data.length+" "+this.state.limit)
+                        this.setState({morePage: false})
+                    }
+
+                }
+            );
+
+    }
+
+    componentWillUpdate(prevProps,prevState) {
+        if (this.props.restaurant !== prevProps.restaurant || this.props.food !== prevProps.food) {
+            this.setState(prevState=>({restaurants:[],page:1,morePage:true}),this.fetchData)
+
+        }
+
+    }
+
+    componentDidMount() {
+        this.fetchData()
+    }
+
     render() {
-        if(this.props.loading){
+        if(this.state.loading){
             return <Spinner />
         }
         else{
-            return <Restaurants restaurants={this.props.restaurants}/>
+            return (
+                <>
+                <Restaurants restaurants={this.state.restaurants}/>
+                {this.state.morePage && <button class="more-restaurants" onClick={this.fetchData}>بیشتر</button>}
+                </>
+            )
+
         }
     }
 }
@@ -164,45 +231,18 @@ export class HomeDescription extends React.Component{
     }
 
 
-    search(event){
-
-        if((this.state.food === "") && (this.state.restaurant === "")){
+    search(){
+       if((this.state.food === "") && (this.state.restaurant === "")){
             window.alert("خطا! حداقل یک فیلد را پر کنید.");
             return;
-        }
+       }
+       ReactDOM.render( <><div className="titre">رستوران ها</div>
+            <SearchResult restaurant={this.state.restaurant} food={this.state.food} /> </>, document.getElementById("restaurants-container"));
+        this.setState(prevState => ({
+            food: "",
+            restaurant: "",
+        }))
 
-
-        event.preventDefault();
-        var params = {
-            "food": this.state.food,
-            "restaurant": this.state.restaurant,
-        };
-
-        var queryString = Object.keys(params).map(function(key) {
-            return key + '=' + params[key]
-        }).join('&');
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'content-length' : queryString.length,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            },
-            body: queryString
-        };
-
-        ReactDOM.render( <div><div className="titre">رستوران ها</div>
-            <SearchResult loading={true} restaurants={''}/></div>, document.getElementById("restaurants-container"));
-
-        fetch('http://localhost:8080/IE/search', requestOptions)
-            .then(response => response.json())
-            .then(data =>{ReactDOM.render( <><div className="titre">رستوران ها</div>
-                <SearchResult loading={false} restaurants={data}/> </>, document.getElementById("restaurants-container"));}
-            )
-            .then(data => this.setState(prevState => ({
-                    food: "",
-                    restaurant: "",
-                }
-            )));
         document.getElementById('restaurantField').value =''
         document.getElementById('foodField').value =''
     }
