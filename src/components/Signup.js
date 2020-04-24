@@ -58,7 +58,7 @@ export function validatePassword(pass,secpass) {
 
 export function validateEmail(email) {
     var errors ="";
-    var emailreg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    var emailreg = /\S+@\S+\.\S+/;
     if(!emailreg.test(email)){
         errors = errors.concat("ایمیل نا معتبر است");
         errors = errors.concat("\n");

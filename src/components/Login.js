@@ -61,7 +61,7 @@ export class Login extends React.Component{
 
         fetch('http://localhost:8080/IE/login', requestOptions)
             .then(response => response.json())
-            .then(data =>{window.alert(data.message);
+            .then(data =>{
                     if(data.message === "سلام!"){
                         ReactDOM.render(<Home />,document.getElementById("root"));
                     }

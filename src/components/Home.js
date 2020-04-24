@@ -21,13 +21,6 @@ export function foodPartySet (id){
 
 
 export class Home extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            restaurants : [],
-            loading: false,
-        };
-    }
     render(){
         return (
 
@@ -39,7 +32,7 @@ export class Home extends React.Component {
                 </div>
                 <div id="restaurants-container">
                     <div className="titre">رستوران ها</div>
-                    <RestaurantContainer loading={this.state.loading} restaurants={this.state.restaurants}/>
+                    <RestaurantContainer />
                 </div>
                 <div id="footer">
                     &copy; تمامی حقوق متعلق به لقمه است
@@ -49,17 +42,6 @@ export class Home extends React.Component {
         );
     }
 
-    componentDidMount() {
-        this.setState({loading:true,})
-        fetch('http://localhost:8080/IE/restaurants')
-            .then(resp => resp.json())
-            .then(data => this.setState(prevState => ({
-                    restaurants: data,
-                    loading:false,
-                }
-            )));
-
-    }
 
 }
 
@@ -79,15 +61,46 @@ export class Restaurants extends React.Component{
 }
 
 export class RestaurantContainer extends React.Component{
+    constructor() {
+        super();
+        this.state ={restaurants : [], page:1 , limit:16 , morePage:true,loading:true}
+        this.fetchData = this.fetchData.bind(this);
+    }
+
+    fetchData(){
+        this.setState({loading:true})
+        fetch('http://localhost:8080/IE/restaurants/'+this.state.page+"/"+this.state.limit)
+            .then(resp => resp.json())
+            .then(data => {
+                this.setState({page :this.state.page +1,loading:false,restaurants : this.state.restaurants.concat(data)})
+                if (data.length < this.state.limit) {
+                    this.setState({morePage: false})
+                }
+                }
+
+            )
+    }
 
     render() {
-        if(this.props.loading){
+        if(this.state.loading){
             return <Spinner />
         }
         else{
-            return <Restaurants restaurants={this.props.restaurants}/>
+            return(
+                <div>
+                    <Restaurants restaurants={this.state.restaurants}/>
+                    {this.state.morePage && <button class="more-restaurants" onClick={this.fetchData}>بیشتر</button>}
+                </div>
+
+            )
+
         }
     }
+
+    componentDidMount() {
+        this.fetchData()
+    }
+
 }
 
 
@@ -122,12 +135,24 @@ export class RestaurantIcon extends React.Component{
     }
 }
 
+export class SearchResult extends React.Component{
+    render() {
+        if(this.props.loading){
+            return <Spinner />
+        }
+        else{
+            return <Restaurants restaurants={this.props.restaurants}/>
+        }
+    }
+}
+
 
 export class HomeDescription extends React.Component{
 
     constructor(props){
         super(props);
         this.search = this.search.bind(this);
+        this.showRestaurants = this.showRestaurants.bind(this);
         this.state = {
             food: "",
             restaurant: "",
@@ -166,12 +191,12 @@ export class HomeDescription extends React.Component{
         };
 
         ReactDOM.render( <div><div className="titre">رستوران ها</div>
-            <RestaurantContainer loading={true} restaurants={''}/></div>, document.getElementById("restaurants-container"));
+            <SearchResult loading={true} restaurants={''}/></div>, document.getElementById("restaurants-container"));
 
         fetch('http://localhost:8080/IE/search', requestOptions)
             .then(response => response.json())
             .then(data =>{ReactDOM.render( <><div className="titre">رستوران ها</div>
-                <RestaurantContainer loading={false} restaurants={data}/> </>, document.getElementById("restaurants-container"));}
+                <SearchResult loading={false} restaurants={data}/> </>, document.getElementById("restaurants-container"));}
             )
             .then(data => this.setState(prevState => ({
                     food: "",
@@ -182,13 +207,17 @@ export class HomeDescription extends React.Component{
         document.getElementById('foodField').value =''
     }
 
+    showRestaurants(){
+        ReactDOM.render(<RestaurantContainer />,document.getElementById("restaurants-container"))
+    }
+
     render(){
         return(
             <div class="home-logo-environment">
                 <div class="layer"></div>
                 <div class="enviroment-content">
                     <div id="description">
-                        <img src={logo} alt="Logo" id="logo" class="rounded mx-auto d-block" />
+                        <img src={logo} alt="Logo" id="logo" class="rounded mx-auto d-block" onClick={this.showRestaurants}/>
                         <div class="description-text">اولین و بزرگ ترین وب سایت سفارش آنلاین غذا در دانشگاه تهران</div>
                     </div>
                 </div>
