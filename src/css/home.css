@@ -71,61 +71,121 @@ html,body{
 .home-logo-environment {
     position: relative;
     top:3vh;
-    background-color: #FF6B6B;
-    height: 20vmin;
+    height: 24vh;
     width: 100%;
-    border: 1px solid red;
-    display: flex;
-    text-align: center;
-    justify-content: center;
-
-    background:  url(../images/Cover.jpg)  no-repeat center center fixed;
+    border: 1px solid rgba(216, 101, 101, 0.3);
+    background: url("../images/Cover.jpg") no-repeat center;
     background-size: cover;
-    box-shadow:inset 0 0 0 2000px rgba(255, 17, 9, 0.3);
+    background: url("../images/Cover.jpg") no-repeat center center ;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    box-shadow:inset 0 0 0 2000px rgba(255, 107, 107, 0.3);
+}
+
+.layer {
+    background-color: rgba(255, 107, 107, 0.3);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.enviroment-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:3vh;
+    height: 24vh;
+}
+
+.search-box {
+    height: 5.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    background-color: white;
+    padding: 1.3vmin;
+    padding-right: 0.5vw;
+    padding-left: 0.5vw;
+    border-radius: 3px;
+    width: 60vmin;
+    color: white;
+    text-align: center;
+    text-shadow: 0.3px 0.3px;
+    margin-bottom: 5vmin;
+    -webkit-box-shadow: 0 0 5px gray;
+    box-shadow: 0 0 5px gray;
+
+}
+
+.search-box-container{
+    margin-top:-5.75vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.search-button{
+    width: 27%;
+    text-align: center;
+    padding: 0.2vmin;
+    padding-top: 0.5vh;
+    padding-bottom: 0.5vh;
+    background-color: #FFE66D;
+    font-size: 0.7em;
+    border-radius: 5px;
+    color: #19535C;
+    outline: none!important;
+}
+
+.search-food,.search-restaurant{
+    width: 33%;
+    margin-left: 2%;
+    text-align: center;
+    padding: 0.2vh;
+    padding-top: 0.5vh;
+    padding-bottom: 0.5vh;
+    border:none;
+    background-color: #F3F3F3;
+    border: 1px solid #e2e2e2;
+    font-size: 0.7em;
+    border-radius: 5px;
+}
+
+.search-food,.search-restaurant:focus{
+    outline:none;
 }
 
 #description {
-    height:17vh;
+    z-index: 1;
     color: white;
     text-align: center;
     text-shadow: 0.3px 0.3px;
     margin-bottom: 5vmin;
 }
 
+
+
 #description img{
-    width: 8vmin;
-    height:8vmin;
+    width: 11vmin;
+    height:11vmin;
 }
 
-#search-box {
-    /*margin-top: 5vh;*/
-    height: 3vh;
-    background-color:white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50%;
+.description-text{
+    font-size: 2.3vmin;
+    padding-top: 1.5vh;
+    margin-bottom: 5%;
 }
 
-#search-box > div {
-    background-color: pink;
-
-}
-
-
-#content{
-    width: 100%;
-    height: 100%;
-    margin-top: 1.5vh;
-    display: flex;
-    flex-flow: column;
-
+#party-box{
+    padding-top: 7vh;
 }
 
 #food-party{
-
-    margin-top: 7vh;
-
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -135,11 +195,9 @@ html,body{
 .titre{
     text-align: center;
     width: 15%;
-
     margin-bottom: 1%;
-
+    margin-top: 1%;
     border-bottom:1px solid #003A4A;
-
     font-family: vazir-bold;
 }
 
@@ -168,12 +226,8 @@ html,body{
     display: none;
 }
 
-.restaurant-photo-name img{
-    /* display: inline-block;*/
-
-}
-
 .discountFood {
+    width: 20vw;
     background-color:white;
     margin-top: 1vh;
     margin-bottom: 1vh;
@@ -195,38 +249,40 @@ html,body{
 
 }
 
-.discountFood .restaurant-photo-name{
+.discountFood .restaurant-photo-name {
     height: 55%;
-    width:50%;
+    width:70%;
     display : flex;
     flex-flow: row wrap;
     justify-content: flex-start;
     margin-top:1vh;
     position: relative;
-    margin-bottom: 1vh;
-
+    margin-bottom: 2vh;
 }
 
 @media screen and (min-width: 901px) {
     .discountFood .restaurant-photo-name {
         width:13vw;
+        margin-bottom: 2vh;
     }
 
 }
 
 .discountFood .restaurant-photo-name img{
-    width:8vw;
-    height: 8vw;
+    width:6vw;
+    height: 6vw;
     /* display: inline-block;*/
     position: relative;
-
     margin-top:0.5vmin;
+    margin-bottom: 0.85vh;
+
 }
 
 @media screen and (min-width: 901px) {
     .discountFood .restaurant-photo-name img {
         width:4vw;
         height:4vw;
+        margin-bottom: 0;
     }
 
 }
@@ -234,8 +290,8 @@ html,body{
 .discountFood .restaurant-photo-name .discountFoodName{
     text-align: right;
     /*display: inline-block;*/
-    width: 50%;
-    font-size:1.5vmin;
+    width: 60%;
+    font-size:1.4vmin;
     white-space: pre-wrap; /* css-3 */
 
     white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
@@ -245,6 +301,14 @@ html,body{
     white-space: -o-pre-wrap; /* Opera 7 */
 
     word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+@media screen and (max-width: 900px) {
+    .discountFood .restaurant-photo-name .discountFoodName {
+        text-align: center;
+        margin: 0 auto;
+    }
+
 }
 
 .discountFood .prices{
@@ -258,7 +322,8 @@ html,body{
 .discountFood .buttons{
     font-size: 1.25vmin;
     border-bottom: 1px dashed #D3D3D3;
-    padding-bottom: 1.25%;
+    padding-bottom: 1.4vmin;
+
     width: 100%;
     text-align: center;
 }

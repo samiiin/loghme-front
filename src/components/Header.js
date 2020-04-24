@@ -46,11 +46,11 @@ export class Header extends React.Component{
         return (
             <header className="header">
                 <div className="exit">خروج</div>
-                {(this.props.page==="restaurant")&&
+                {(this.props.page==="restaurant" || this.props.page==="home")&&
                 <div id="Profile" onClick={this.goToCredit}>حساب کاربری</div>}
                 <i className="flaticon-smart-cart" onClick={this.showBasket}></i>
-                <div className="logo-container"><img onClick={this.goToHome} src={logo} alt="Logo" id="logo" className="rounded mx-auto d-block"/>
-                </div>
+                {this.props.page!=="home" && <div className="logo-container"><img onClick={this.goToHome} src={logo} alt="Logo" id="logo" className="rounded mx-auto d-block"/>
+                </div>}
 
                 <BasketModal
                     show={this.state.modalShow}
@@ -84,5 +84,5 @@ class BasketModal extends React.Component {
         );
     }
 }
-//
+
 

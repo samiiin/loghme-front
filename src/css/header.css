@@ -6,8 +6,8 @@
 header{
     top:0;
     position:fixed;
-    z-index:1;
-    height:3vh;
+    z-index:5;
+    height:5vh;
     width:100%;
     background-color:white;
 }

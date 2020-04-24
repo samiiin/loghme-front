@@ -8,15 +8,16 @@ import {Header} from './Header'
 import {Spinner} from './Spinner'
 
 export function foodPartySet (id){
-    if(document.getElementById("party-box")) {
         fetch('http://localhost:8080/IE/DiscountFoods')
             .then(resp => resp.json())
             .then(data => {
+                if(document.getElementById("party-box")) {
                     ReactDOM.render(<FoodParty discounts={data} loading={false}/>, document.getElementById(id))
                 }
+                }
             )
-    }
 }
+
 
 
 export class Home extends React.Component {
@@ -111,8 +112,8 @@ export class RestaurantIcon extends React.Component{
     render(){
         return(
             <div class="restaurant rounded">
-                <img src={this.state.restaurantlogo} alt="Logo" id="logo" class="rounded mx-auto d-block" />
-                <div class="restaurantname">{this.state.restaurantname}</div>
+                <img src={this.props.restaurantlogo} alt="Logo" id="logo" class="rounded mx-auto d-block" />
+                <div class="restaurantname">{this.props.restaurantname}</div>
                 <button class="form-button rounded" type="submit" onClick={(e) => this.showMenu(e, this.props.restaurantid)}>نمایش منو</button>
             </div>
 
@@ -124,20 +125,78 @@ export class RestaurantIcon extends React.Component{
 
 export class HomeDescription extends React.Component{
 
+    constructor(props){
+        super(props);
+        this.search = this.search.bind(this);
+        this.state = {
+            food: "",
+            restaurant: "",
+        };
+    }
+
+    handleChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+
+    search(event){
+
+        if((this.state.food === "") && (this.state.restaurant === "")){
+            window.alert("خطا! حداقل یک فیلد را پر کنید.");
+            return;
+        }
+
+
+        event.preventDefault();
+        var params = {
+            "food": this.state.food,
+            "restaurant": this.state.restaurant,
+        };
+
+        var queryString = Object.keys(params).map(function(key) {
+            return key + '=' + params[key]
+        }).join('&');
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'content-length' : queryString.length,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: queryString
+        };
+
+        ReactDOM.render( <div><div className="titre">رستوران ها</div>
+            <RestaurantContainer loading={true} restaurants={''}/></div>, document.getElementById("restaurants-container"));
+
+        fetch('http://localhost:8080/IE/search', requestOptions)
+            .then(response => response.json())
+            .then(data =>{ReactDOM.render( <><div className="titre">رستوران ها</div>
+                <RestaurantContainer loading={false} restaurants={data}/> </>, document.getElementById("restaurants-container"));}
+            )
+            .then(data => this.setState(prevState => ({
+                    food: "",
+                    restaurant: "",
+                }
+            )));
+        document.getElementById('restaurantField').value =''
+        document.getElementById('foodField').value =''
+    }
+
     render(){
         return(
             <div class="home-logo-environment">
-                <div id="content">
+                <div class="layer"></div>
+                <div class="enviroment-content">
                     <div id="description">
                         <img src={logo} alt="Logo" id="logo" class="rounded mx-auto d-block" />
-                        اولین و بزرگ ترین وب سایت سفارش آنلاین غذا در دانشگاه تهران
+                        <div class="description-text">اولین و بزرگ ترین وب سایت سفارش آنلاین غذا در دانشگاه تهران</div>
                     </div>
-                    <div id="serach-box">
-                        <div>
-                            <input class="rounded" type="text" placeholder="نام غذا" />
-                            <input class="rounded" type="text" placeholder="نام رستوران" />
-                            <button class="form-button rounded" type="submit">جست و جو</button>
-                        </div>
+                </div>
+                <div class="search-box-container">
+                    <div className="search-box">
+                        <input className="search-food rounded" name="food" id="foodField" onChange={this.handleChange} type="text" placeholder="نام غذا"/>
+                        <input className="search-restaurant rounded" name="restaurant" id="restaurantField" onChange={this.handleChange} type="text" placeholder="نام رستوران"/>
+                        <button className="search-button rounded" onClick={this.search} type="submit">جست و جو</button>
                     </div>
                 </div>
             </div>
@@ -310,16 +369,16 @@ export class DiscountFood extends React.Component {
                     <span class="remained rounded">{text}</span> &nbsp;
                     <button style={{backgroundColor: backgroundColor}} disabled={disabled} class="form-button rounded"
                             type="submit"
-                            onClick={(e) => this.addToCart(e, this.props.discountfood.ownerRestaurant.id, this.props.discountfood.discountFood.name)}>خرید
+                            onClick={(e) => this.addToCart(e, this.props.discountfood.ownerRestaurantID, this.props.discountfood.discountFood.name)}>خرید
                     </button>
 
                 </div>
                 <div dir="rtl" class="restaurantName">
-                    {this.props.discountfood.ownerRestaurant.name}
+                    {this.props.discountfood.ownerRestaurantName}
                 </div>
                 <FoodModal show={this.state.modalShow} onHide={modalClose}
-                           rname={this.props.discountfood.ownerRestaurant.name}
-                           rid={this.props.discountfood.ownerRestaurant.id}
+                           rname={this.props.discountfood.ownerRestaurantName}
+                           rid={this.props.discountfood.ownerRestaurantID}
                            price={this.props.discountfood.discountFood.price}
                            oldPrice={this.props.discountfood.discountFood.oldPrice}
                            type="party" count={this.props.discountfood.discountFood.count}
@@ -335,4 +394,3 @@ export class DiscountFood extends React.Component {
 
     }
 }
-//

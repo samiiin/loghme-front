@@ -149,7 +149,7 @@ class OrderModal extends React.Component {
                             return (
                                 <tr>
                                     <td className="order-modal-cell">{i}</td>
-                                    <td class="order-modal-cell">{dfood.foodName}</td>
+                                    <td class="order-modal-cell">*{dfood.foodName}</td>
                                     <td class="order-modal-cell">{dfood.count}</td>
                                     <td class="order-modal-cell">{dfood.foodPrice}</td>
                                 </tr>
