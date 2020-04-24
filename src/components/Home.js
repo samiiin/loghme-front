@@ -266,7 +266,7 @@ export class FoodParty extends React.Component{
         this.state = {
             discountFoods : [],
             time : 0,
-            loading: false,
+            loading: true,
         };
     }
     render(){

@@ -65,6 +65,9 @@ export class Login extends React.Component{
                     if(data.message === "سلام!"){
                         ReactDOM.render(<Home />,document.getElementById("root"));
                     }
+                    else{
+                        window.alert(data.message);
+                    }
                 }
             )
 
