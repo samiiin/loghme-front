@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import '../css/signup.css'
 import {Login} from "./Login";
 import pageImage from "../images/3.jpg";
-
+import {Link, Redirect} from "react-router-dom";
 
 export function validateUserName(str){
     var errors = "";
@@ -93,6 +93,7 @@ export class Signup extends React.Component{
             phone: "",
             password: "",
             secondPassword: "",
+            redirect:false
         };
     }
 
@@ -149,7 +150,7 @@ export class Signup extends React.Component{
             .then(response => response.json())
             .then(data =>{window.alert(data.message);
                     if(data.message === "به لقمه خوش آمدید."){
-                        ReactDOM.render(<Login />,document.getElementById("root"));
+                        this.setState({redirect:true})
                     }
                 }
             )
@@ -161,45 +162,57 @@ export class Signup extends React.Component{
     }
 
     render(){
-        return(
-            <div className="page-container">
-                <div className="page-top">
-                    <div className="register">ثبت نام</div>
-                    <div className="login" onClick={this.login}> ورود</div>
+        if(this.state.redirect){
+            return <Redirect to="/login"/>
+        }
+        else {
+            return (
+                <div className="page-container">
+                    <div className="page-top">
+                        <div className="register">ثبت نام</div>
+                        <Link to="/login" className="login"> ورود</Link>
 
-                </div>
-                <img className="picture-page" src={pageImage} alt="login"/>
-                <div className="right-part">
-                    <div className="page-title">ثبت نام</div>
-                    <div className="page-input">
-                        <div className="input-group">
-                            <input type="text" className="form-input" name="name" id="name" placeholder="نام" onChange={this.handleChange}/>
-                        </div>
-                        <div className="input-group">
-                            <input type="text" className="form-input" name="lastName" id="lastName" placeholder="نام خانوادگی" onChange={this.handleChange} />
-                        </div>
-                        <div className="input-group">
-                            <input type="text" className="form-input" name="username" id="username" placeholder="نام کاربری" onChange={this.handleChange} />
-                        </div>
-                        <div className="input-group">
-                            <input type="text" className="form-input" name="email" id="email" placeholder="ایمیل" onChange={this.handleChange} />
-                        </div>
-                        <div className="input-group">
-                            <input type="text" className="form-input" name="phone" id="phone" placeholder="شماره موبایل" onChange={this.handleChange} />
-                        </div>
-                        <div className="input-group">
-                            <input type="password" className="form-input" name="password" id="password" placeholder="رمز عبور" onChange={this.handleChange} />
-                        </div>
-
-                        <div className="input-group">
-                            <input type="password" className="form-input" name="secondPassword" id="secondPassword" placeholder="تکرار رمز عبور " onChange={this.handleChange} />
-                        </div>
                     </div>
-                    <button type="button" className="btn-login" onClick={this.signup}>ثبت نام</button>
-                </div>
+                    <img className="picture-page" src={pageImage} alt="login"/>
+                    <div className="right-part">
+                        <div className="page-title">ثبت نام</div>
+                        <div className="page-input">
+                            <div className="input-group">
+                                <input type="text" className="form-input" name="name" id="name" placeholder="نام"
+                                       onChange={this.handleChange}/>
+                            </div>
+                            <div className="input-group">
+                                <input type="text" className="form-input" name="lastName" id="lastName"
+                                       placeholder="نام خانوادگی" onChange={this.handleChange}/>
+                            </div>
+                            <div className="input-group">
+                                <input type="text" className="form-input" name="username" id="username"
+                                       placeholder="نام کاربری" onChange={this.handleChange}/>
+                            </div>
+                            <div className="input-group">
+                                <input type="text" className="form-input" name="email" id="email" placeholder="ایمیل"
+                                       onChange={this.handleChange}/>
+                            </div>
+                            <div className="input-group">
+                                <input type="text" className="form-input" name="phone" id="phone"
+                                       placeholder="شماره موبایل" onChange={this.handleChange}/>
+                            </div>
+                            <div className="input-group">
+                                <input type="password" className="form-input" name="password" id="password"
+                                       placeholder="رمز عبور" onChange={this.handleChange}/>
+                            </div>
 
-            </div>
-        );
+                            <div className="input-group">
+                                <input type="password" className="form-input" name="secondPassword" id="secondPassword"
+                                       placeholder="تکرار رمز عبور " onChange={this.handleChange}/>
+                            </div>
+                        </div>
+                        <button type="button" className="btn-login" onClick={this.signup}>ثبت نام</button>
+                    </div>
+
+                </div>
+            );
+        }
 
     }
 }

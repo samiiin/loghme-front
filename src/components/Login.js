@@ -1,10 +1,7 @@
 import React from "react";
-import ReactDOM from 'react-dom';
 import '../css/login.css'
-import {Home} from "./Home";
-import {Signup} from "./Signup";
 import pageImage from '../images/3.jpg'
-
+import {Link,Redirect} from "react-router-dom";
 export function validatePassword(pass) {
     var errors ="";
     var passw = /^(?=.*\d)(?=.*[a-zA-Z\u0600-\u06FF\s]).{6,20}$/;
@@ -17,13 +14,14 @@ export function validatePassword(pass) {
 }
 
 export class Login extends React.Component{
+
     constructor() {
         super();
         this.goTohome = this.goTohome.bind(this)
-        this.register = this.register.bind(this)
         this.state = {
             username : "",
             password: "",
+            redirect:false
         };
     }
 
@@ -63,7 +61,8 @@ export class Login extends React.Component{
             .then(response => response.json())
             .then(data =>{
                     if(data.message === "سلام!"){
-                        ReactDOM.render(<Home />,document.getElementById("root"));
+                        this.setState({redirect:true})
+
                     }
                     else{
                         window.alert(data.message);
@@ -73,38 +72,42 @@ export class Login extends React.Component{
 
     }
 
-    register(){
-        ReactDOM.render(<Signup />,document.getElementById("root"))
-    }
-
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
     render(){
-        return(
-            <div class="page-container">
-                <div class="page-top">
-                    <div class="register" onClick={this.register}>ثبت نام</div>
-                    <div class="login"> ورود </div>
+        if(this.state.redirect) {
+            return <Redirect to="/home"/>
+        }
+        else
+            {
+                return (
+                    <div class="page-container">
+                        <div class="page-top">
+                            <Link to="/signup" class="register">ثبت نام</Link>
+                            <div class="login"> ورود</div>
 
-                </div>
-                <img class="picture-page" src={pageImage} alt="login"/>
-                <div className="right-part">
-                    <div className="page-title">ورود</div>
-                    <div className="page-input">
-                        <div className="input-group">
-                            <input type="text" className="form-input" name="username" id="username" placeholder="نام کاربری" onChange={this.handleChange} />
                         </div>
-                        <div className="input-group">
-                            <input type="password" required="" name="password" id="password" placeholder="رمز عبور" onChange={this.handleChange} />
+                        <img class="picture-page" src={pageImage} alt="login"/>
+                        <div className="right-part">
+                            <div className="page-title">ورود</div>
+                            <div className="page-input">
+                                <div className="input-group">
+                                    <input type="text" className="form-input" name="username" id="username"
+                                           placeholder="نام کاربری" onChange={this.handleChange}/>
+                                </div>
+                                <div className="input-group">
+                                    <input type="password" required="" name="password" id="password"
+                                           placeholder="رمز عبور" onChange={this.handleChange}/>
+                                </div>
+                            </div>
+                            <button type="button" className="btn-login" onClick={this.goTohome}>ورود</button>
                         </div>
+
                     </div>
-                    <button type="button" className="btn-login" onClick={this.goTohome}>ورود</button>
-                </div>
 
-            </div>
-
-        );
+                );
+            }
     }
 }

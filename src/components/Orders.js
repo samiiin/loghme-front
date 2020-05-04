@@ -2,9 +2,9 @@ import React from 'react';
 import {Header} from './Header'
 import '../css/factor.css'
 import {Modal} from "react-bootstrap";
-import ReactDOM from "react-dom";
-import {UserInf,Credit} from "./Credit"
-export class Factor extends React.Component {
+import {Link} from "react-router-dom";
+import {UserInf} from "./Credit"
+export class Orders extends React.Component {
 
     constructor(props) {
         super(props);
@@ -16,7 +16,6 @@ export class Factor extends React.Component {
             credit: null,
             id: null,
         };
-        this.goToCredit = this.goToCredit.bind(this)
     }
 
     componentDidMount() {
@@ -34,9 +33,6 @@ export class Factor extends React.Component {
 
     }
 
-    goToCredit(){
-        ReactDOM.render(<Credit />,document.getElementById("root"))
-    }
 
     render(){
         return (
@@ -46,7 +42,7 @@ export class Factor extends React.Component {
                 <div id="content">
                     <div id="tab">
                         <div className="orders-tab" >سفارش ها</div>
-                        <div className="addCredit-tab" onClick={this.goToCredit} >افزایش اعتبار</div>
+                        <Link to="/credit" className="addCredit-tab">افزایش اعتبار</Link>
                     </div>
                     <div class="orders-box">
                         <Table userID={this.state.id} />

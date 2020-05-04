@@ -1,13 +1,10 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import logo from "../images/LOGO.png";
 import {Modal} from "react-bootstrap";
 import {CurrentBasket} from './Restaurant'
-import {Credit} from "./Credit"
-import {Home} from "./Home"
 import {foodPartySet} from "./Home";
 import '../css/header.css';
-
+import {Link} from "react-router-dom";
 
 export class Header extends React.Component{
 
@@ -15,21 +12,11 @@ export class Header extends React.Component{
         super();
         this.state = { ordinaryFoods:[],partyFoods:[],modalShow:false}
         this.showBasket = this.showBasket.bind(this)
-        this.goToCredit = this.goToCredit.bind(this)
-        this.goTohome = this.goToHome.bind(this)
     }
 
 
     showBasket() {
         this.setState(prevState => ({modalShow: true}))
-    }
-
-    goToCredit(){
-        ReactDOM.render(<Credit />,document.getElementById("root"))
-    }
-
-    goToHome(){
-        ReactDOM.render(<Home />,document.getElementById("root"))
     }
 
     render() {
@@ -47,10 +34,10 @@ export class Header extends React.Component{
             <header className="header">
                 <div className="exit">خروج</div>
                 {(this.props.page==="restaurant" || this.props.page==="home")&&
-                <div id="Profile" onClick={this.goToCredit}>حساب کاربری</div>}
+                <div><Link id="Profile" to="/credit">حساب کاربری</Link></div>}
                 <i className="flaticon-smart-cart" onClick={this.showBasket}></i>
-                {this.props.page!=="home" && <div className="logo-container"><img onClick={this.goToHome} src={logo} alt="Logo" id="logo" className="rounded mx-auto d-block"/>
-                </div>}
+                {this.props.page!=="home" && <Link to="/home"><div className="logo-container"><img to="/home" src={logo}  alt="Logo" id="logo" className="img rounded mx-auto d-block"/>
+                </div></Link>}
 
                 <BasketModal
                     show={this.state.modalShow}

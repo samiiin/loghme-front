@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '../css/credit.css';
-import {Factor} from './Factor';
 import {Header} from './Header'
+import {Link} from "react-router-dom";
 export class Credit extends React.Component {
     constructor(props) {
         super(props);
@@ -13,11 +13,6 @@ export class Credit extends React.Component {
             emailAddress: null,
             credit: null,
         };
-        this.showOrders = this.showOrders.bind(this)
-    }
-
-    showOrders(){
-        ReactDOM.render(<Factor />,document.getElementById('root'));
     }
 
     componentDidMount() {
@@ -39,7 +34,7 @@ export class Credit extends React.Component {
                 <Header page="credit" />
                 <UserInf name={this.state.name} lastName={this.state.lastName} phoneNumber={this.state.phoneNumber} emailAddress={this.state.emailAddress} credit={this.state.credit}/>
                 <div id="tab">
-                    <div class="orders" onClick={this.showOrders}>سفارش ها</div>
+                    <Link class="orders" to="/Orders">سفارش ها</Link>
                     <div class="addCredit">افزایش اعتبار</div>
                 </div>
                 <CreditTab credit={this.state.credit} />

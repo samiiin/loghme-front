@@ -6,7 +6,7 @@ import {Restaurant} from './Restaurant';
 import {FoodModal} from './FoodModal'
 import {Header} from './Header'
 import {Spinner} from './Spinner'
-
+import {Link,BrowserRouter} from "react-router-dom";
 export function foodPartySet (id){
         fetch('http://localhost:8080/IE/DiscountFoods')
             .then(resp => resp.json())
@@ -127,7 +127,7 @@ export class RestaurantIcon extends React.Component{
             <div class="restaurant rounded">
                 <img src={this.props.restaurantlogo} alt="Logo" id="logo" class="rounded mx-auto d-block" />
                 <div class="restaurantname">{this.props.restaurantname}</div>
-                <button class="form-button rounded" type="submit" onClick={(e) => this.showMenu(e, this.props.restaurantid)}>نمایش منو</button>
+                <Link to={"/restaurant/"+this.props.restaurantid}><button class="form-button rounded" type="submit" >نمایش منو</button></Link>
             </div>
 
         );
@@ -235,8 +235,8 @@ export class HomeDescription extends React.Component{
             window.alert("خطا! حداقل یک فیلد را پر کنید.");
             return;
        }
-       ReactDOM.render( <><div className="titre">رستوران ها</div>
-            <SearchResult restaurant={this.state.restaurant} food={this.state.food} /> </>, document.getElementById("restaurants-container"));
+       ReactDOM.render( <BrowserRouter><div className="titre">رستوران ها</div>
+            <SearchResult restaurant={this.state.restaurant} food={this.state.food} /></BrowserRouter>, document.getElementById("restaurants-container"));
         this.setState(prevState => ({
             food: "",
             restaurant: "",
@@ -247,7 +247,7 @@ export class HomeDescription extends React.Component{
     }
 
     showRestaurants(){
-        ReactDOM.render(<RestaurantContainer />,document.getElementById("restaurants-container"))
+        ReactDOM.render(<BrowserRouter><RestaurantContainer /></BrowserRouter>,document.getElementById("restaurants-container"))
     }
 
     render(){
