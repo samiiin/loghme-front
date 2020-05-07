@@ -6,40 +6,77 @@ import {Restaurant} from './Restaurant';
 import {FoodModal} from './FoodModal'
 import {Header} from './Header'
 import {Spinner} from './Spinner'
-import {Link,BrowserRouter} from "react-router-dom";
+import {Link,BrowserRouter,Redirect} from "react-router-dom";
+import {Login} from "./Login";
 export function foodPartySet (id){
-        fetch('http://localhost:8080/IE/DiscountFoods')
-            .then(resp => resp.json())
-            .then(data => {
-                if(document.getElementById("party-box")) {
+    const reqOptions = {
+        method: "GET",
+        headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+    }
+    fetch('http://localhost:8080/IE/DiscountFoods',reqOptions)
+        .then(resp => resp.json())
+        .then(data => {
+            if(data.status!=null && data.status===-1){
+                ReactDOM.render(<BrowserRouter  history={"/"+data.message}><Login /></BrowserRouter>, document.getElementById("root"))
+            }
+            else if(document.getElementById("party-box")) {
                     ReactDOM.render(<FoodParty discounts={data} loading={false}/>, document.getElementById(id))
-                }
-                }
-            )
+            }
+            }
+        )
 }
 
 
 
 export class Home extends React.Component {
+
+    constructor() {
+        super();
+        this.state={redirect:false,redirectPage:"",loading:true}
+    }
+
+    componentDidMount() {
+        const reqOptions = {
+            method: "GET",
+            headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+        }
+        fetch('http://localhost:8080/IE/DiscountFoods',reqOptions)
+            .then(resp => resp.json())
+            .then(data => {
+                this.setState({loading:false})
+                if(data.status!=null && data.status===-1){
+                    this.setState({redirect:true,redirectPage:data.message})
+                }
+            })
+
+    }
+
     render(){
-        return (
+        if(this.state.loading){
+            return <div class="spinner-page"><Spinner /></div>
+        }
+        else if(this.state.redirect){
+            return <Redirect to={"/"+this.state.redirectPage}/>
+        }
+        else {
+            return (
+                <div>
+                    <Header page="home"/>
+                    <HomeDescription/>
+                    <div id="party-box">
+                        {foodPartySet("party-box")}
+                    </div>
+                    <div id="restaurants-container">
+                        <div className="titre">رستوران ها</div>
+                        <RestaurantContainer/>
+                    </div>
+                    <div id="footer">
+                        &copy; تمامی حقوق متعلق به لقمه است
+                    </div>
 
-            <div>
-                <Header page="home" />
-                <HomeDescription />
-                <div id="party-box">
-                    {foodPartySet ("party-box")}
                 </div>
-                <div id="restaurants-container">
-                    <div className="titre">رستوران ها</div>
-                    <RestaurantContainer />
-                </div>
-                <div id="footer">
-                    &copy; تمامی حقوق متعلق به لقمه است
-                </div>
-
-            </div>
-        );
+            );
+        }
     }
 
 
@@ -69,13 +106,17 @@ export class RestaurantContainer extends React.Component{
 
     fetchData(){
         this.setState({loading:true})
-        fetch('http://localhost:8080/IE/restaurants/'+this.state.page+"/"+this.state.limit)
+        const reqOptions = {
+            method: "GET",
+            headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+        }
+        fetch('http://localhost:8080/IE/restaurants/'+this.state.page+"/"+this.state.limit,reqOptions)
             .then(resp => resp.json())
             .then(data => {
-                this.setState({page :this.state.page +1,loading:false,restaurants : this.state.restaurants.concat(data)})
-                if (data.length < this.state.limit) {
-                    this.setState({morePage: false})
-                }
+                    this.setState({page :this.state.page +1,loading:false,restaurants : this.state.restaurants.concat(data)})
+                    if (data.length < this.state.limit) {
+                        this.setState({morePage: false})
+                    }
                 }
 
             )
@@ -166,6 +207,7 @@ export class SearchResult extends React.Component{
         const requestOptions = {
             method: 'POST',
             headers: {
+                'Authorization' : "Bearer"+localStorage.getItem('userInfo'),
                 'content-length' : queryString.length,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
@@ -203,8 +245,8 @@ export class SearchResult extends React.Component{
         else{
             return (
                 <>
-                <Restaurants restaurants={this.state.restaurants}/>
-                {this.state.morePage && <button class="more-restaurants" onClick={this.fetchData}>بیشتر</button>}
+                    <Restaurants restaurants={this.state.restaurants}/>
+                    {this.state.morePage && <button class="more-restaurants" onClick={this.fetchData}>بیشتر</button>}
                 </>
             )
 
@@ -231,11 +273,11 @@ export class HomeDescription extends React.Component{
 
 
     search(){
-       if((this.state.food === "") && (this.state.restaurant === "")){
+        if((this.state.food === "") && (this.state.restaurant === "")){
             window.alert("خطا! حداقل یک فیلد را پر کنید.");
             return;
-       }
-       ReactDOM.render( <BrowserRouter><div className="titre">رستوران ها</div>
+        }
+        ReactDOM.render( <BrowserRouter><div className="titre">رستوران ها</div>
             <SearchResult restaurant={this.state.restaurant} food={this.state.food} /></BrowserRouter>, document.getElementById("restaurants-container"));
         this.setState(prevState => ({
             food: "",
@@ -305,47 +347,56 @@ export class FoodParty extends React.Component{
         this.state = {
             discountFoods : [],
             time : 0,
-            loading: true,
+            redirect:false,
+            redirectPage:""
         };
     }
     render(){
-        var discountfoods = this.props.discounts;
-        let loadingAttr = false;
-        if(this.state.loading){
-            loadingAttr = true;
-            this.setState({loading: false,})
-        }
+       var discountfoods = this.props.discounts;
+       if(this.state.redirect){
+            return <Redirect to={"/"+this.state.redirectPage}/>
+       }
 
-        if(loadingAttr === true){
-            return <Spinner />
-        }
-
-        return(
-            <div id="food-party">
-                <div class="titre">جشن غذا!</div>
-                <div class="rounded timer">زمان باقی مانده: &nbsp;<span >{Math.floor((this.state.time) / 60)}</span>:<span>{(this.state.time) % 60}</span>&nbsp;</div>
-                <div className="scrollmenu">
-                    {discountfoods.map(function (discountfoods, index) {
-                            return <DiscountFood discountfood={discountfoods}/>
-                        }
-                    )}
-                </div>
-            </div>
-        );
+       else {
+               return (
+                   <div id="food-party">
+                       <div class="titre">جشن غذا!</div>
+                       <div class="rounded timer">زمان باقی مانده: &nbsp;
+                           <span>{Math.floor((this.state.time) / 60)}</span>:<span>{(this.state.time) % 60}</span>&nbsp;
+                       </div>
+                       <div className="scrollmenu">
+                           {discountfoods.map(function (discountfoods, index) {
+                                   return <DiscountFood discountfood={discountfoods}/>
+                               }
+                           )}
+                       </div>
+                   </div>
+               );
+           }
     }
 
     getTime() {
-        fetch('http://localhost:8080/IE/FoodPartyTime')
+        const reqOptions = {
+            method: "GET",
+            headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+        }
+        fetch('http://localhost:8080/IE/FoodPartyTime',reqOptions)
             .then(resp => resp.json())
-            .then(data => this.setState(prevState => ({
-                    time: data.remainingTime,
+            .then(data => {
+                if(data.status!=null && data.status===-1){
+                    this.setState({redirect:true,redirectPage:data.message})
                 }
-            )));
+                else {
+                    this.setState(prevState => ({
+                            time: data.remainingTime,
+                        }
+                    ))
+                }
+            });
     }
 
 
     componentDidMount() {
-        this.setState({loading: true,})
         foodPartySet("party-box")
         this.getTime()
         this.myInterval = setInterval(() => {
@@ -390,6 +441,7 @@ export class DiscountFood extends React.Component {
         const requestOptions = {
             method: 'POST',
             headers: {
+                'Authorization' : "Bearer"+localStorage.getItem('userInfo'),
                 'content-length': queryString.length,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },

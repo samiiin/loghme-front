@@ -2,6 +2,7 @@ import React from "react";
 import '../css/login.css'
 import pageImage from '../images/3.jpg'
 import {Link,Redirect} from "react-router-dom";
+import {Spinner} from './Spinner'
 export function validatePassword(pass) {
     var errors ="";
     var passw = /^(?=.*\d)(?=.*[a-zA-Z\u0600-\u06FF\s]).{6,20}$/;
@@ -21,7 +22,9 @@ export class Login extends React.Component{
         this.state = {
             username : "",
             password: "",
-            redirect:false
+            redirect:false,
+            loading: true,
+            redirectPage:"",
         };
     }
 
@@ -51,6 +54,7 @@ export class Login extends React.Component{
         const requestOptions = {
             method: 'POST',
             headers: {
+                'Authorization' : "Bearer"+localStorage.getItem('userInfo'),
                 'content-length' : queryString.length,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
@@ -61,7 +65,8 @@ export class Login extends React.Component{
             .then(response => response.json())
             .then(data =>{
                     if(data.message === "سلام!"){
-                        this.setState({redirect:true})
+                        localStorage.setItem("userInfo", data.token);
+                        this.setState({redirect:true, redirectPage:"home"})
 
                     }
                     else{
@@ -72,42 +77,65 @@ export class Login extends React.Component{
 
     }
 
+    componentDidMount() {
+        const reqOptions = {
+             method: "GET",
+             headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+            }
+        fetch('http://localhost:8080/IE/checkLogin', reqOptions )
+            .then(response => response.json())
+            .then(data =>{
+                    if(data.status === -1){
+                        this.setState({loading:false, redirect:true, redirectPage:data.message,})
+                    }
+                    else{
+                        //window.alert(data.message);
+                        localStorage.clear();
+                        this.setState({loading:false,})
+                    }
+                }
+            )
+    }
+
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
     }
 
     render(){
-        if(this.state.redirect) {
-            return <Redirect to="/home"/>
+        if(this.state.loading){
+            return <Spinner />
+        }
+        else if(this.state.redirect){
+            return <Redirect to={"/"+this.state.redirectPage}/>
         }
         else
-            {
-                return (
-                    <div class="page-container">
-                        <div class="page-top">
-                            <Link to="/signup" class="register">ثبت نام</Link>
-                            <div class="login"> ورود</div>
-
-                        </div>
-                        <img class="picture-page" src={pageImage} alt="login"/>
-                        <div className="right-part">
-                            <div className="page-title">ورود</div>
-                            <div className="page-input">
-                                <div className="input-group">
-                                    <input type="text" className="form-input" name="username" id="username"
-                                           placeholder="نام کاربری" onChange={this.handleChange}/>
-                                </div>
-                                <div className="input-group">
-                                    <input type="password" required="" name="password" id="password"
-                                           placeholder="رمز عبور" onChange={this.handleChange}/>
-                                </div>
-                            </div>
-                            <button type="button" className="btn-login" onClick={this.goTohome}>ورود</button>
-                        </div>
+        {
+            return (
+                <div class="page-container">
+                    <div class="page-top">
+                        <Link to="/signup" class="register">ثبت نام</Link>
+                        <div class="login"> ورود</div>
 
                     </div>
+                    <img class="picture-page" src={pageImage} alt="login"/>
+                    <div className="right-part">
+                        <div className="page-title">ورود</div>
+                        <div className="page-input">
+                            <div className="input-group">
+                                <input type="text" className="form-input" name="username" id="username"
+                                       placeholder="نام کاربری" onChange={this.handleChange}/>
+                            </div>
+                            <div className="input-group">
+                                <input type="password" required="" name="password" id="password"
+                                       placeholder="رمز عبور" onChange={this.handleChange}/>
+                            </div>
+                        </div>
+                        <button type="button" className="btn-login" onClick={this.goTohome}>ورود</button>
+                    </div>
 
-                );
-            }
+                </div>
+
+            );
+        }
     }
 }

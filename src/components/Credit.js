@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import '../css/credit.css';
 import {Header} from './Header'
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 export class Credit extends React.Component {
     constructor(props) {
         super(props);
@@ -12,37 +12,54 @@ export class Credit extends React.Component {
             phoneNumber: null,
             emailAddress: null,
             credit: null,
+            redirect:false,
+            redirectPage:""
         };
     }
 
     componentDidMount() {
         fetch('http://localhost:8080/IE/User')
             .then(resp => resp.json())
-            .then(data => this.setState(prevState => ({
-                    name: data.name,
-                    lastName: data.lastName,
-                    phoneNumber: data.phoneNumber,
-                    emailAddress: data.emailAddress,
-                    credit: data.credit,
+            .then(data => {
+                window.alert("hi")
+                if(data.status!=null && data.status===-1){
+                    this.setState({redirect:true,redirectPage:data.message})
                 }
-            )));
+                else{
+                    this.setState(prevState => ({
+                        name: data.name,
+                        lastName: data.lastName,
+                        phoneNumber: data.phoneNumber,
+                        emailAddress: data.emailAddress,
+                        credit: data.credit,
+
+                    }))}
+                }
+          );
     }
 
     render(){
-        return (
-            <div>
-                <Header page="credit" />
-                <UserInf name={this.state.name} lastName={this.state.lastName} phoneNumber={this.state.phoneNumber} emailAddress={this.state.emailAddress} credit={this.state.credit}/>
-                <div id="tab">
-                    <Link class="orders" to="/Orders">سفارش ها</Link>
-                    <div class="addCredit">افزایش اعتبار</div>
+        if(this.state.redirect){
+            return <Redirect to={"/"+this.state.redirectPage}/>
+        }
+        else {
+            return (
+
+                <div>
+                    <Header page="credit"/>
+                    <UserInf name={this.state.name} lastName={this.state.lastName} phoneNumber={this.state.phoneNumber}
+                             emailAddress={this.state.emailAddress} credit={this.state.credit}/>
+                    <div id="tab">
+                        <Link class="orders" to="/Orders">سفارش ها</Link>
+                        <div class="addCredit">افزایش اعتبار</div>
+                    </div>
+                    <CreditTab credit={this.state.credit}/>
+                    <div id="footer">
+                        &copy; تمامی حقوق متعلق به لقمه است
+                    </div>
                 </div>
-                <CreditTab credit={this.state.credit} />
-                <div id="footer">
-                    &copy; تمامی حقوق متعلق به لقمه است
-                </div>
-            </div>
-        );
+            );
+        }
     }
 }
 
@@ -72,6 +89,8 @@ export class CreditTab extends React.Component{
         this.state = {
             credit: this.props.credit,
             input: 0,
+            redirect:false,
+            redirectPage:""
         };
     }
 
@@ -96,7 +115,14 @@ export class CreditTab extends React.Component{
 
         fetch('http://localhost:8080/IE/addCredit', requestOptions)
             .then(response => response.json())
-            .then(data => ReactDOM.render(<>{data.credit} تومان </>,document.getElementById('credit'))
+            .then(data =>{
+                if(data.status!=null && data.status===-1){
+                    this.setState({redirect:true,redirectPage:data.message})
+                }
+                else{
+                    ReactDOM.render(<>{data.credit} تومان </>,document.getElementById('credit'))
+                }
+            }
             );
         document.getElementById('text').value =''
     }
@@ -106,19 +132,23 @@ export class CreditTab extends React.Component{
     }
 
     render(){
-        return(
-            <div class="credit-box">
-                <div>
-                    <input id="text" name="input" class="rounded increase-input" type="text" placeholder="میزان افزایش اعتبار" onChange={this.handleChange}/>
-                    <button class="increase-credit rounded" onClick={this.addCredit}>افزایش</button>
+        if(this.state.redirect){
+            return <Redirect to={"/"+this.state.redirectPage}/>
+        }
+        else {
+            return (
+                <div class="credit-box">
+                    <div>
+                        <input id="text" name="input" class="rounded increase-input" type="text"
+                               placeholder="میزان افزایش اعتبار" onChange={this.handleChange}/>
+                        <button class="increase-credit rounded" onClick={this.addCredit}>افزایش</button>
+                    </div>
                 </div>
-            </div>
 
-        );
+            );
+        }
     }
 }
-
-//
 
 
 

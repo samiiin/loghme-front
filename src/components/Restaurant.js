@@ -5,41 +5,58 @@ import ReactDOM from "react-dom";
 import {FoodModal} from './FoodModal'
 import {Header} from './Header'
 import {Spinner} from './Spinner'
+import {BrowserRouter, Redirect} from "react-router-dom";
+import {Login} from "./Login";
 
 export function CurrentBasket (divclass){
     var ordinaryFoods=[];
     var partyFoods=[];
-    fetch('http://localhost:8080/IE/currentBasket')
+    const reqOptions = {
+        method: "GET",
+        headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+    }
+    fetch('http://localhost:8080/IE/currentBasket',reqOptions)
         .then(resp => resp.json())
         .then(data => {
-                ordinaryFoods = data.foods
-                partyFoods = data.discountFoods
-                var x=document.getElementsByClassName(divclass)
-                var i;
-                for (i = 0; i < x.length; i++) {
-                    ReactDOM.render(<Basket ordinary={ordinaryFoods}
-                                            party={partyFoods}/>, document.getElementsByClassName(divclass)[i])
+                if (data.status != null && data.status === -1) {
+                    ReactDOM.render(<BrowserRouter
+                        history={"/" + data.message}><Login/></BrowserRouter>, document.getElementById("root"))
+                } else {
+                    ordinaryFoods = data.foods
+                    partyFoods = data.discountFoods
+                    var x = document.getElementsByClassName(divclass)
+                    var i;
+                    for (i = 0; i < x.length; i++) {
+                        ReactDOM.render(<Basket ordinary={ordinaryFoods}
+                                                party={partyFoods}/>, document.getElementsByClassName(divclass)[i])
+                    }
                 }
             }
         )
 }
 
-/*export function Spinner () {
-    return  <div className = "spinner-border text-secondar" role = "status"><span className = "sr-only" > Loading...</span></div>
-}*/
 
 export class Restaurant extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {name: null, logo: null , location:null , menu:[], id : this.props.id ,loading:false};
+        this.state = {name: null, logo: null , location:null , menu:[], id : this.props.id ,loading:false,redirect:false,redirectPage:""};
     }
 
 
     componentDidMount() {
         this.setState({loading : true})
-        fetch('http://localhost:8080/IE/restaurantInfo/'+ this.state.id)
+        const reqOptions = {
+            method: "GET",
+            headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+        }
+        fetch('http://localhost:8080/IE/restaurantInfo/'+ this.state.id,reqOptions)
             .then(resp => resp.json())
-            .then(data => this.setState(prevState => ({
+            .then(data =>{
+                if(data.status===-1){
+                    this.setState({redirect:true,redirectPage:data.message})
+                }
+                else{
+                this.setState(prevState => ({
                     name : data.name ,
                     logo : data.logo,
                     location : data.location,
@@ -47,37 +64,43 @@ export class Restaurant extends React.Component{
                     id : this.props.id,
                     loading : false
                 }
-            )))
+            ))}})
 
     }
 
     render() {
-        var id = this.state.id
-        var name = this.state.name
-        var loading = this.state.loading
-        return(
-            <div >
-                <Header page="restaurant" />
-                {!this.state.loading && <RestaurantLogo name={this.state.name} logo={this.state.logo}/>}
-                {this.state.loading && <div className="restaurant-logo-environment"><Spinner/></div>}
-                <div className="foodTitle"><span>منوی غذا</span></div>
-                <div id="food-basket">
-                    <div class="basket-container" id="inpage"></div>
-                    {CurrentBasket("basket-container")}
-                    <div className="flex-container">
-                        {loading && <div id="restaurantSpinner"><Spinner/></div>}
-                        {!loading && this.state.menu.map(function (menu,index) {
-                                return <Food  rname={name} rid={id}  name={menu.name} popularity={menu.popularity} price={menu.price} fimage={menu.image} description={menu.description}/>
-                            }
-                        )}
+        if(this.state.redirect){
+            return <Redirect to={"/"+this.state.redirectPage}/>
+        }
+        else {
+            var id = this.state.id
+            var name = this.state.name
+            var loading = this.state.loading
+            return (
+                <div>
+                    <Header page="restaurant"/>
+                    {!this.state.loading && <RestaurantLogo name={this.state.name} logo={this.state.logo}/>}
+                    {this.state.loading && <div className="restaurant-logo-environment"><Spinner/></div>}
+                    <div className="foodTitle"><span>منوی غذا</span></div>
+                    <div id="food-basket">
+                        <div class="basket-container" id="inpage"></div>
+                        {CurrentBasket("basket-container")}
+                        <div className="flex-container">
+                            {loading && <div id="restaurantSpinner"><Spinner/></div>}
+                            {!loading && this.state.menu.map(function (menu, index) {
+                                    return <Food rname={name} rid={id} name={menu.name} popularity={menu.popularity}
+                                                 price={menu.price} fimage={menu.image} description={menu.description}/>
+                                }
+                            )}
+                        </div>
+                    </div>
+                    <div id="footer">
+                        &copy; تمامی حقوق متعلق به لقمه است
                     </div>
                 </div>
-                <div id="footer">
-                    &copy; تمامی حقوق متعلق به لقمه است
-                </div>
-            </div>
 
-        );
+            );
+        }
     }
 }
 
@@ -151,6 +174,7 @@ class Buy extends React.Component{
         const requestOptions = {
             method: 'POST',
             headers: {
+                'Authorization' : "Bearer"+localStorage.getItem('userInfo'),
                 'content-length' : queryString.length,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
@@ -194,6 +218,7 @@ class BasketRow extends React.Component{
         const requestOptions = {
             method: 'POST',
             headers: {
+                'Authorization' : "Bearer"+localStorage.getItem('userInfo'),
                 'content-length' : queryString.length,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
@@ -259,6 +284,7 @@ class Basket extends React.Component{
         const requestOptions = {
             method: 'POST',
             headers: {
+                'Authorization' : "Bearer"+localStorage.getItem('userInfo'),
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
         };

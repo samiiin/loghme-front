@@ -2,7 +2,7 @@ import React from 'react';
 import {Header} from './Header'
 import '../css/factor.css'
 import {Modal} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link,Redirect} from "react-router-dom";
 import {UserInf} from "./Credit"
 export class Orders extends React.Component {
 
@@ -15,26 +15,38 @@ export class Orders extends React.Component {
             emailAddress: null,
             credit: null,
             id: null,
+            redirect:false,
+            redirectPage:""
         };
     }
 
     componentDidMount() {
         fetch('http://localhost:8080/IE/User')
             .then(resp => resp.json())
-            .then(data => this.setState(prevState => ({
-                    name: data.name,
-                    lastName: data.lastName,
-                    phoneNumber: data.phoneNumber,
-                    emailAddress: data.emailAddress,
-                    credit: data.credit,
-                    id: data.id,
+            .then(data => {
+                if(data.status===-1){
+                    this.setState({redirect:true,redirectPage:data.message})
                 }
-            )));
+                else{
+                    this.setState(prevState => ({
+                        name: data.name,
+                        lastName: data.lastName,
+                        phoneNumber: data.phoneNumber,
+                        emailAddress: data.emailAddress,
+                        credit: data.credit,
+                        id: data.id
+                    }
+
+
+            ))}});
 
     }
 
 
     render(){
+        if(this.state.redirectPage)
+            return <Redirect to={"/"+this.state.redirectPage}/>
+        else{
         return (
             <div>
                 <Header page="Factor"/>
@@ -53,6 +65,7 @@ export class Orders extends React.Component {
                 </div>
             </div>
         );
+        }
     }
 }
 

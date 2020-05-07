@@ -63,6 +63,14 @@ html,body{
     position: relative;
 }
 
+.spinner-page{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+
+}
 
 .form-button{
     outline: none!important;
