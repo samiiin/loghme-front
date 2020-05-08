@@ -6,7 +6,7 @@ import {Restaurant} from './Restaurant';
 import {FoodModal} from './FoodModal'
 import {Header} from './Header'
 import {Spinner} from './Spinner'
-import {Link,BrowserRouter,Redirect} from "react-router-dom";
+import {BrowserRouter,Redirect,Link} from "react-router-dom";
 import {Login} from "./Login";
 export function foodPartySet (id){
     const reqOptions = {
@@ -17,7 +17,7 @@ export function foodPartySet (id){
         .then(resp => resp.json())
         .then(data => {
             if(data.status!=null && data.status===-1){
-                ReactDOM.render(<BrowserRouter  history={"/"+data.message}><Login /></BrowserRouter>, document.getElementById("root"))
+                ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
             }
             else if(document.getElementById("party-box")) {
                     ReactDOM.render(<FoodParty discounts={data} loading={false}/>, document.getElementById(id))
@@ -32,7 +32,7 @@ export class Home extends React.Component {
 
     constructor() {
         super();
-        this.state={redirect:false,redirectPage:"",loading:true}
+        this.state={redirect:false,loading:true}
     }
 
     componentDidMount() {
@@ -45,7 +45,7 @@ export class Home extends React.Component {
             .then(data => {
                 this.setState({loading:false})
                 if(data.status!=null && data.status===-1){
-                    this.setState({redirect:true,redirectPage:data.message})
+                    this.setState({redirect:true})
                 }
             })
 
@@ -56,7 +56,8 @@ export class Home extends React.Component {
             return <div class="spinner-page"><Spinner /></div>
         }
         else if(this.state.redirect){
-            return <Redirect to={"/"+this.state.redirectPage}/>
+            ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
+            return <Redirect to="/Login"/>
         }
         else {
             return (
@@ -100,7 +101,7 @@ export class Restaurants extends React.Component{
 export class RestaurantContainer extends React.Component{
     constructor() {
         super();
-        this.state ={restaurants : [], page:1 , limit:16 , morePage:true,loading:true}
+        this.state ={restaurants : [], page:1 , limit:16 , morePage:true,loading:true,redirect:false}
         this.fetchData = this.fetchData.bind(this);
     }
 
@@ -113,9 +114,17 @@ export class RestaurantContainer extends React.Component{
         fetch('http://localhost:8080/IE/restaurants/'+this.state.page+"/"+this.state.limit,reqOptions)
             .then(resp => resp.json())
             .then(data => {
-                    this.setState({page :this.state.page +1,loading:false,restaurants : this.state.restaurants.concat(data)})
-                    if (data.length < this.state.limit) {
-                        this.setState({morePage: false})
+                    if (this.state.redirect) {
+                        this.setState({redirect: true})
+                    } else {
+                        this.setState({
+                            page: this.state.page + 1,
+                            loading: false,
+                            restaurants: this.state.restaurants.concat(data)
+                        })
+                        if (data.length < this.state.limit) {
+                            this.setState({morePage: false})
+                        }
                     }
                 }
 
@@ -123,7 +132,11 @@ export class RestaurantContainer extends React.Component{
     }
 
     render() {
-        if(this.state.loading){
+        if(this.state.redirect){
+            ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
+            return <Redirect to="/login"/>
+        }
+        else if(this.state.loading){
             return <Spinner />
         }
         else{
@@ -150,6 +163,7 @@ export class RestaurantIcon extends React.Component{
     constructor (props){
         super(props);
         this.showMenu = this.showMenu.bind(this);
+        this.goToRestaurant = this.goToRestaurant.bind(this)
         this.state = {
             restaurantname : this.props.restaurantname,
             restaurantlogo : this.props.restaurantlogo,
@@ -163,15 +177,20 @@ export class RestaurantIcon extends React.Component{
             document.getElementById('root')
         );
     }
-    render(){
-        return(
-            <div class="restaurant rounded">
-                <img src={this.props.restaurantlogo} alt="Logo" id="logo" class="rounded mx-auto d-block" />
-                <div class="restaurantname">{this.props.restaurantname}</div>
-                <Link to={"/restaurant/"+this.props.restaurantid}><button class="form-button rounded" type="submit" >نمایش منو</button></Link>
-            </div>
 
-        );
+    goToRestaurant(){
+        ReactDOM.render(<BrowserRouter history={"/restaurant/"+this.props.restaurantid} ><Restaurant id={this.props.restaurantid} /></BrowserRouter>,document.getElementById("root"))
+    }
+    render(){
+            return (
+                <div class="restaurant rounded">
+                    <img src={this.props.restaurantlogo} alt="Logo" id="logo" class="rounded mx-auto d-block"/>
+                    <div class="restaurantname">{this.props.restaurantname}</div>
+                    <Link to={"/restaurant/"+this.props.restaurantid}><button class="form-button rounded" onClick={this.goToRestaurant}>نمایش منو</button></Link>
+                </div>
+
+            );
+
 
     }
 }
@@ -184,7 +203,8 @@ export class SearchResult extends React.Component{
             page:1,
             limit:16,
             loading:true,
-            morePage :true
+            morePage :true,
+            redirect:false
         }
         this.fetchData = this.fetchData.bind(this)
 
@@ -216,11 +236,20 @@ export class SearchResult extends React.Component{
         fetch('http://localhost:8080/IE/search', requestOptions)
             .then(response => response.json())
             .then(data => {
-                    this.setState({page :this.state.page+1 ,loading:false,restaurants : this.state.restaurants.concat(data)})
-                    if (data.length < this.state.limit) {
-                        this.setState({morePage: false})
-                    }
+                    if (data.status != null && data.status === -1) {
+                        this.setState({redirect: true})
 
+                    } else {
+                        this.setState({
+                            page: this.state.page + 1,
+                            loading: false,
+                            restaurants: this.state.restaurants.concat(data)
+                        })
+                        if (data.length < this.state.limit) {
+                            this.setState({morePage: false})
+                        }
+
+                    }
                 }
             );
 
@@ -239,7 +268,12 @@ export class SearchResult extends React.Component{
     }
 
     render() {
-        if(this.state.loading){
+        if(this.State.redirect){
+            ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
+            return (<Redirect to="/login"/>)
+        }
+
+        else if(this.state.loading){
             return <Spinner />
         }
         else{
@@ -277,7 +311,7 @@ export class HomeDescription extends React.Component{
             window.alert("خطا! حداقل یک فیلد را پر کنید.");
             return;
         }
-        ReactDOM.render( <BrowserRouter><div className="titre">رستوران ها</div>
+        ReactDOM.render( <BrowserRouter history={"/home"}><div className="titre">رستوران ها</div>
             <SearchResult restaurant={this.state.restaurant} food={this.state.food} /></BrowserRouter>, document.getElementById("restaurants-container"));
         this.setState(prevState => ({
             food: "",
@@ -289,7 +323,7 @@ export class HomeDescription extends React.Component{
     }
 
     showRestaurants(){
-        ReactDOM.render(<BrowserRouter><RestaurantContainer /></BrowserRouter>,document.getElementById("restaurants-container"))
+        ReactDOM.render(<BrowserRouter history={"/home"}><RestaurantContainer /></BrowserRouter>,document.getElementById("restaurants-container"))
     }
 
     render(){
@@ -348,13 +382,13 @@ export class FoodParty extends React.Component{
             discountFoods : [],
             time : 0,
             redirect:false,
-            redirectPage:""
         };
     }
     render(){
        var discountfoods = this.props.discounts;
        if(this.state.redirect){
-            return <Redirect to={"/"+this.state.redirectPage}/>
+           ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
+           return <Redirect to="/login" />
        }
 
        else {
@@ -384,7 +418,7 @@ export class FoodParty extends React.Component{
             .then(resp => resp.json())
             .then(data => {
                 if(data.status!=null && data.status===-1){
-                    this.setState({redirect:true,redirectPage:data.message})
+                    this.setState({redirect:true})
                 }
                 else {
                     this.setState(prevState => ({

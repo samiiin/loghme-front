@@ -1,10 +1,13 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import logo from "../images/LOGO.png";
 import {Modal} from "react-bootstrap";
 import {CurrentBasket} from './Restaurant'
-import {foodPartySet} from "./Home";
+import {foodPartySet, Home} from "./Home";
 import '../css/header.css';
-import {Link, Redirect} from "react-router-dom";
+import {Link, Redirect,BrowserRouter} from "react-router-dom";
+import {Credit} from "./Credit";
+import {Login} from "./Login";
 
 export class Header extends React.Component{
 
@@ -21,13 +24,16 @@ export class Header extends React.Component{
 
     logOut() {
         localStorage.removeItem("userInfo");
-        //return axios.post(USER_API_BASE_URL + 'logout', {}, this.getAuthHeader());
         fetch('http://localhost:8080/IE/logout')
-            .then(resp => resp.json())
-            .then(data => {
-                    this.setState({redirect:true, redirectPage:"login",})
-                }
-            );
+            .then(resp => resp.json());
+        ReactDOM.render(<BrowserRouter history={"/login"}><Login /></BrowserRouter> ,document.getElementById("root"))
+    }
+
+    goToHome(){
+        ReactDOM.render(<BrowserRouter history={"/home"}><Home /></BrowserRouter> ,document.getElementById("root"))
+    }
+    goToCredit(){
+        ReactDOM.render(<BrowserRouter history={"/credit"}><Credit /></BrowserRouter> ,document.getElementById("root"))
     }
 
     render() {
@@ -48,12 +54,12 @@ export class Header extends React.Component{
 
             return (
                 <header className="header">
-                    <div className="exit" onClick={this.logOut}>خروج</div>
+                    <Link to={"/login"}><div className="exit" onClick={this.logOut}>خروج</div></Link>
                     {(this.props.page === "restaurant" || this.props.page === "home") &&
-                    <div><Link id="Profile" to="/credit">حساب کاربری</Link></div>}
+                    <div><Link id="Profile" to="/credit" onClick={this.goToCredit}>حساب کاربری</Link></div>}
                     <i className="flaticon-smart-cart" onClick={this.showBasket}></i>
                     {this.props.page !== "home" && <Link to="/home">
-                        <div className="logo-container"><img to="/home" src={logo} alt="Logo" id="logo"
+                        <div className="logo-container"><img onClick={this.goToHome} src={logo} alt="Logo" id="logo"
                                                              className="img rounded mx-auto d-block"/>
                         </div>
                     </Link>}

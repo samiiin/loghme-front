@@ -40,6 +40,7 @@ export class FoodModal extends React.Component {
             const requestOptions = {
                 method: 'POST',
                 headers: {
+                    'Authorization' : "Bearer"+localStorage.getItem('userInfo'),
                     'content-length' : queryString.length,
                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
                 },

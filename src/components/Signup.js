@@ -101,6 +101,25 @@ export class Signup extends React.Component{
         ReactDOM.render(<Login />,document.getElementById("root"));
     }
 
+    componentDidMount() {
+        const reqOptions = {
+            method: "GET",
+            headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+        }
+        fetch('http://localhost:8080/IE/checkSignUp', reqOptions )
+            .then(response => response.json())
+            .then(data =>{
+                    if(data.status === -1){
+                        this.setState({loading:false, redirect:true, redirectPage:data.message,})
+                    }
+                    else{
+                        localStorage.clear();
+                        this.setState({loading:false,})
+                    }
+                }
+            )
+    }
+
 
     signup(){
         var errors = "";

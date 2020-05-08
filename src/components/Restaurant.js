@@ -20,7 +20,7 @@ export function CurrentBasket (divclass){
         .then(data => {
                 if (data.status != null && data.status === -1) {
                     ReactDOM.render(<BrowserRouter
-                        history={"/" + data.message}><Login/></BrowserRouter>, document.getElementById("root"))
+                        history="/login"><Login/></BrowserRouter>, document.getElementById("root"))
                 } else {
                     ordinaryFoods = data.foods
                     partyFoods = data.discountFoods
@@ -39,7 +39,7 @@ export function CurrentBasket (divclass){
 export class Restaurant extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {name: null, logo: null , location:null , menu:[], id : this.props.id ,loading:false,redirect:false,redirectPage:""};
+        this.state = {name: null, logo: null , location:null , menu:[], id : this.props.id ,loading:false,redirect:false};
     }
 
 
@@ -52,8 +52,8 @@ export class Restaurant extends React.Component{
         fetch('http://localhost:8080/IE/restaurantInfo/'+ this.state.id,reqOptions)
             .then(resp => resp.json())
             .then(data =>{
-                if(data.status===-1){
-                    this.setState({redirect:true,redirectPage:data.message})
+                if(data.status!=null && data.status===-1){
+                    this.setState({redirect:true})
                 }
                 else{
                 this.setState(prevState => ({
@@ -70,7 +70,8 @@ export class Restaurant extends React.Component{
 
     render() {
         if(this.state.redirect){
-            return <Redirect to={"/"+this.state.redirectPage}/>
+            ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
+            return <Redirect to="/login"/>
         }
         else {
             var id = this.state.id
@@ -150,12 +151,12 @@ class Food extends React.Component{
 
 
 class Buy extends React.Component{
-
     constructor(props) {
         super(props);
         this.addFood = this.addFood.bind(this);
         this.state = {
-            status:null
+            status:null,
+            redirect:false
         }
 
         this.addFood = this.addFood.bind(this);
@@ -182,16 +183,28 @@ class Buy extends React.Component{
         };
         fetch('http://localhost:8080/IE/buyFood', requestOptions)
             .then(response => response.json())
-            .then(data => {this.setState(prevState => ({status: data.status}))})
-            .then(data=>{
-                if(this.state.status !== 200)
-                    window.alert("غذا از رستوران دیگری انتخاب شده")
+            .then(data => {
+                    if(data.status!=null && data.status===-1){
+                        this.setState({redirect:true})
+                    }
+                    else{
+                        this.setState(prevState => ({status: data.status}))
+                        if (data.status !== 200)
+                            window.alert("غذا از رستوران دیگری انتخاب شده")
+                    }
+                })
+            .then(()=>{
+                if(!this.state.redirect)
+                CurrentBasket("basket-container")
             })
-            .then(()=>CurrentBasket("basket-container"))
 
     }
 
     render() {
+        if(this.state.redirect){
+            ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
+            return <Redirect to="/login"/>
+        }
         return(
             <button type="button" className="food-cart-add rounded" onClick={this.addFood}>خرید</button>
 
@@ -203,7 +216,7 @@ class BasketRow extends React.Component{
     constructor() {
         super();
         this.handleClick = this.handleClick.bind(this)
-        this.state ={status: null , message:null}
+        this.state ={status: null , message:null,redirect:false}
     }
 
     handleClick(path){
@@ -226,47 +239,63 @@ class BasketRow extends React.Component{
         };
         fetch('http://localhost:8080/IE/'+path, requestOptions)
             .then(response => response.json())
-            .then(data => {this.setState(prevState => ({status: data.status,message:data.message}
-            ))})
-            .then(data=>{
-                if(this.state.status !== 200)
-                    window.alert(this.state.message)
+            .then(data => {
+                if(data.status!=null && data.status===-1){
+                    this.setState({redirect:true})
+                }
+                else{
+                    this.setState(prevState => ({status: data.status,message:data.message}))
+                    if (data.status !== 200)
+                        window.alert(data.message)
+                }
+
             })
-            .then(()=>CurrentBasket("basket-container"))
+            .then(()=>{
+                if(!this.state.redirect)
+                    CurrentBasket("basket-container")
+            })
 
     }
 
 
-    render(){
-        if(!(this.props.party)){
-            return(
-                <div className="row-group">
-                    <div className="order-name"><small>{this.props.name}</small></div>
-                    <div className="column-group">
-                        <div className="minus-plus"><i className="flaticon-plus" onClick={()=>this.handleClick("buyFood")}></i>
-                            <div>{this.props.count}</div>
-                            <i className="flaticon-minus" onClick={()=>this.handleClick("decreaseOrdinaryFood")}></i>
+    render() {
+        if (this.state.redirect) {
+            ReactDOM.render(<BrowserRouter history="/login"><Login/></BrowserRouter>, document.getElementById("root"))
+            return <Redirect to="/login"/>
+        } else {
+            if (!(this.props.party)) {
+                return (
+                    <div className="row-group">
+                        <div className="order-name"><small>{this.props.name}</small></div>
+                        <div className="column-group">
+                            <div className="minus-plus"><i className="flaticon-plus"
+                                                           onClick={() => this.handleClick("buyFood")}></i>
+                                <div>{this.props.count}</div>
+                                <i className="flaticon-minus"
+                                   onClick={() => this.handleClick("decreaseOrdinaryFood")}></i>
+                            </div>
+                            <div className="price">{this.props.price * this.props.count}تومان</div>
                         </div>
-                        <div className="price">{this.props.price * this.props.count}تومان</div>
                     </div>
-                </div>
-            );
-        }
-        else{
-            return(
-                <div className="row-group">
-                    <div className="order-name"><small>*{this.props.name}</small></div>
-                    <div className="column-group">
-                        <div className="minus-plus"><i className="flaticon-plus"  onClick={()=>this.handleClick("addDiscountFoodToBasket")}></i>
-                            <div>{this.props.count}</div>
-                            <i className="flaticon-minus" onClick={()=>this.handleClick("decreasePartyFood")}></i></div>
-                        <div className="price">{this.props.price * this.props.count}تومان</div>
+                );
+            } else {
+                return (
+                    <div className="row-group">
+                        <div className="order-name"><small>*{this.props.name}</small></div>
+                        <div className="column-group">
+                            <div className="minus-plus"><i className="flaticon-plus"
+                                                           onClick={() => this.handleClick("addDiscountFoodToBasket")}></i>
+                                <div>{this.props.count}</div>
+                                <i className="flaticon-minus" onClick={() => this.handleClick("decreasePartyFood")}></i>
+                            </div>
+                            <div className="price">{this.props.price * this.props.count}تومان</div>
+                        </div>
                     </div>
-                </div>
-            );
+                );
+
+            }
 
         }
-
     }
 }
 
@@ -277,7 +306,7 @@ class Basket extends React.Component{
     constructor() {
         super();
         this.finalizeOrder = this.finalizeOrder.bind(this)
-        this.state = {status : null ,message : null}
+        this.state = {status : null ,message : null,redirect:false}
     }
 
     finalizeOrder(){
@@ -293,37 +322,53 @@ class Basket extends React.Component{
             .then(data => {this.setState(prevState => ({status: data.status,message:data.message}
             ))})
             .then(data=>{
-                window.alert(this.state.message)
+                if(data.status!=null && data.status===-1){
+                    this.setState({redirect:true})
+                }
+                else {
+                    window.alert(this.state.message)
+                }
             })
-            .then(()=>CurrentBasket("basket-container"))
+            .then(()=>{
+                if(!this.state.redirect)
+                CurrentBasket("basket-container")
+            })
 
 
     }
 
     render(){
         var price=0;
-        return(
-            <div className="basket">
-                <div className="basket-title">سبد خرید</div>
-                <div className="orders-container">
-                    {this.props.ordinary.map(function (ordinaryFood,index) {
-                            price += ordinaryFood.foodPrice*ordinaryFood.count
-                            return <BasketRow party={false} name={ordinaryFood.foodName} price={ordinaryFood.foodPrice} count={ordinaryFood.count}/>
-                        }
-                    )}
+        if(this.state.redirect) {
+            ReactDOM.render(<BrowserRouter history="/login"><Login/></BrowserRouter>, document.getElementById("root"))
+            return <Redirect to="/login"/>
+        }
+        else {
+            return (
+                <div className="basket">
+                    <div className="basket-title">سبد خرید</div>
+                    <div className="orders-container">
+                        {this.props.ordinary.map(function (ordinaryFood, index) {
+                                price += ordinaryFood.foodPrice * ordinaryFood.count
+                                return <BasketRow party={false} name={ordinaryFood.foodName} price={ordinaryFood.foodPrice}
+                                                  count={ordinaryFood.count}/>
+                            }
+                        )}
 
-                    {this.props.party.map(function (discountFood,index) {
-                            price += discountFood.foodPrice*discountFood.count
-                            return <BasketRow  party={true} name={discountFood.foodName} price={discountFood.foodPrice} count={discountFood.count}/>
-                        }
-                    )}
+                        {this.props.party.map(function (discountFood, index) {
+                                price += discountFood.foodPrice * discountFood.count
+                                return <BasketRow party={true} name={discountFood.foodName} price={discountFood.foodPrice}
+                                                  count={discountFood.count}/>
+                            }
+                        )}
 
+                    </div>
+                    <div className="total-price">جمع کل: <b>{price} تومان</b></div>
+                    <button type="button" className="btn-confirm" onClick={this.finalizeOrder}>تایید نهایی</button>
                 </div>
-                <div className="total-price">جمع کل: <b>{price} تومان</b></div>
-                <button type="button" className="btn-confirm" onClick={this.finalizeOrder}>تایید نهایی</button>
-            </div>
 
-        );
+            );
+        }
 
     }
 }

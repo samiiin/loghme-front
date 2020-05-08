@@ -2,8 +2,10 @@ import React from 'react';
 import {Header} from './Header'
 import '../css/factor.css'
 import {Modal} from "react-bootstrap";
-import {Link,Redirect} from "react-router-dom";
-import {UserInf} from "./Credit"
+import {BrowserRouter, Link, Redirect} from "react-router-dom";
+import {Credit, UserInf} from "./Credit"
+import ReactDOM from "react-dom";
+import {Login} from "./Login";
 export class Orders extends React.Component {
 
     constructor(props) {
@@ -16,16 +18,19 @@ export class Orders extends React.Component {
             credit: null,
             id: null,
             redirect:false,
-            redirectPage:""
         };
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/IE/User')
+        const reqOptions = {
+            method: "GET",
+            headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+        }
+        fetch('http://localhost:8080/IE/User',reqOptions)
             .then(resp => resp.json())
             .then(data => {
-                if(data.status===-1){
-                    this.setState({redirect:true,redirectPage:data.message})
+                if(data.status!=null && data.status===-1){
+                    this.setState({redirect:true})
                 }
                 else{
                     this.setState(prevState => ({
@@ -42,10 +47,16 @@ export class Orders extends React.Component {
 
     }
 
+    goToCredit(){
+            ReactDOM.render(<BrowserRouter history="/credit"><Credit /></BrowserRouter>,document.getElementById("root"))
+    }
 
     render(){
-        if(this.state.redirectPage)
-            return <Redirect to={"/"+this.state.redirectPage}/>
+        if(this.state.redirect) {
+            ReactDOM.render(<BrowserRouter
+                history="/login"><Login/></BrowserRouter>, document.getElementById("root"))
+            return <Redirect to="/login"/>
+        }
         else{
         return (
             <div>
@@ -54,7 +65,7 @@ export class Orders extends React.Component {
                 <div id="content">
                     <div id="tab">
                         <div className="orders-tab" >سفارش ها</div>
-                        <Link to="/credit" className="addCredit-tab">افزایش اعتبار</Link>
+                        <Link to="/credit" className="addCredit-tab" onClick={this.goToCredit}>افزایش اعتبار</Link>
                     </div>
                     <div class="orders-box">
                         <Table userID={this.state.id} />
@@ -73,17 +84,25 @@ export class Table extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            orders : [],
+            orders : [],redirect:false
         };
     }
 
     fetchOrders(){
-        fetch('http://localhost:8080/IE/Orders')
+        const reqOptions = {
+            method: "GET",
+            headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+        }
+        fetch('http://localhost:8080/IE/Orders',reqOptions)
             .then(resp => resp.json())
-            .then(data => this.setState(prevState => ({
+            .then(data => {
+                if(data.status!=null && data.status===-1)
+                    this.setState({redirect:true})
+                 else{
+                this.setState(prevState => ({
                     orders: data,
                 }
-            )))
+            ))}})
     }
 
     componentDidMount() {
@@ -99,16 +118,24 @@ export class Table extends React.Component{
     }
 
     render(){
-        var i=0;
-        return(
-            <table class="orders-table">
-               {this.state.orders.map(function (order,index) {
-                   i=i+1
-                   return <Order order={order} number={i}/>
-               } )}
-            </table>
+        if(this.state.redirect){
+            window.alert("r2")
+            ReactDOM.render(<BrowserRouter
+                history="/login"><Login/></BrowserRouter>, document.getElementById("root"))
+            return <Redirect to="/login"/>
+        }
+        else {
+            var i = 0;
+            return (
+                <table class="orders-table">
+                    {this.state.orders.map(function (order, index) {
+                        i = i + 1
+                        return <Order order={order} number={i}/>
+                    })}
+                </table>
 
-        );
+            );
+        }
     }
 
 }

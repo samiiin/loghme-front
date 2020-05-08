@@ -1,8 +1,11 @@
 import React from "react";
 import '../css/login.css'
 import pageImage from '../images/3.jpg'
-import {Link,Redirect} from "react-router-dom";
+import {Link, Redirect, BrowserRouter} from "react-router-dom";
 import {Spinner} from './Spinner'
+import {Home} from './Home'
+import ReactDOM from "react-dom";
+import {Signup} from "./Signup";
 export function validatePassword(pass) {
     var errors ="";
     var passw = /^(?=.*\d)(?=.*[a-zA-Z\u0600-\u06FF\s]).{6,20}$/;
@@ -24,7 +27,7 @@ export class Login extends React.Component{
             password: "",
             redirect:false,
             loading: true,
-            redirectPage:"",
+            redirectPage:""
         };
     }
 
@@ -66,8 +69,7 @@ export class Login extends React.Component{
             .then(data =>{
                     if(data.message === "سلام!"){
                         localStorage.setItem("userInfo", data.token);
-                        this.setState({redirect:true, redirectPage:"home"})
-
+                        this.setState({redirect:true})
                     }
                     else{
                         window.alert(data.message);
@@ -79,22 +81,85 @@ export class Login extends React.Component{
 
     componentDidMount() {
         const reqOptions = {
-             method: "GET",
-             headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
-            }
+            method: "GET",
+            headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+        }
         fetch('http://localhost:8080/IE/checkLogin', reqOptions )
             .then(response => response.json())
             .then(data =>{
-                    if(data.status === -1){
-                        this.setState({loading:false, redirect:true, redirectPage:data.message,})
+                    if(data!=null && data.status === -1){
+                        this.setState({loading:false, redirect:true})
                     }
                     else{
-                        //window.alert(data.message);
+                        this.googleSDK();
                         localStorage.clear();
-                        this.setState({loading:false,})
+                        this.setState({loading:false})
                     }
                 }
             )
+    }
+
+    signOut(){
+        var auth2 = window.gapi.auth2.getAuthInstance();
+        auth2.signOut().then(auth2.disconnect())
+    }
+
+
+    prepareLoginButton = () => {
+        console.log(this.refs.googleLoginBtn);
+        this.auth2.attachClickHandler(this.refs.googleLoginBtn, {},
+            (googleUser) => {
+
+                let profile = googleUser.getBasicProfile();
+                console.log('Token || ' + googleUser.getAuthResponse().id_token);
+                console.log('ID: ' + profile.getId());
+                console.log('Name: ' + profile.getName());
+                console.log('Image URL: ' + profile.getImageUrl());
+                console.log('Email: ' + profile.getEmail());
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Authorization' : "Bearer"+googleUser.getAuthResponse().id_token,
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                };
+                fetch('http://localhost:8080/IE/loginByGoogle', requestOptions)
+                    .then(response => response.json())
+                    .then(data =>{
+                            if(data.message === "سلام!"){
+                                localStorage.setItem("userInfo", data.token);
+                                this.setState({redirect:true, redirectPage:"home"})
+
+                            }
+                            else{
+                                this.setState({redirect:true, redirectPage:"signup"})
+                            }
+                        }
+                    )
+            }, (error) => {
+                //alert(JSON.stringify(error, undefined, 2));
+            });
+
+    }
+
+    googleSDK = () => {
+        window['googleSDKLoaded'] = () => {
+            window['gapi'].load('auth2', () => {
+                this.auth2 = window['gapi'].auth2.init({
+                    client_id: '805689182939-0ga0omqkur2mmmo22066rphmi97d1qkt.apps.googleusercontent.com',
+                });
+                this.prepareLoginButton();
+            });
+        }
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'google-jssdk'));
+
     }
 
     handleChange = (e) => {
@@ -103,10 +168,20 @@ export class Login extends React.Component{
 
     render(){
         if(this.state.loading){
-            return <Spinner />
+            return <div className = "spinner-page" ><Spinner /></div>
         }
-        else if(this.state.redirect){
-            return <Redirect to={"/"+this.state.redirectPage}/>
+
+        else if(this.state.redirect && this.state.redirectPage===""){
+            ReactDOM.render(<BrowserRouter  history={"/home"}><Home /></BrowserRouter>, document.getElementById("root"))
+            return (<Redirect to={"/home"}/>)
+        }
+        else if(this.state.redirect && this.state.redirectPage==="home"){
+            ReactDOM.render(<BrowserRouter  history={"/home"}><Home /></BrowserRouter>, document.getElementById("root"))
+            return (<Redirect to={"/home"}/>)
+        }
+        else if(this.state.redirect && this.state.redirectPage==="signup"){
+            ReactDOM.render(<BrowserRouter  history={"/signup"}><Signup /></BrowserRouter>, document.getElementById("root"))
+            return (<Redirect to={"/signup"}/>)
         }
         else
         {
@@ -131,6 +206,11 @@ export class Login extends React.Component{
                             </div>
                         </div>
                         <button type="button" className="btn-login" onClick={this.goTohome}>ورود</button>
+                        <div className="g-signin2" data-theme="light"
+                             ref="googleLoginBtn">button
+                        </div>
+
+                        <a href="#" className="gLogOut" onClick={this.signOut}>خروج از گوگل</a>
                     </div>
 
                 </div>
