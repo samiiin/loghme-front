@@ -43,7 +43,7 @@ export class Header extends React.Component{
     render() {
 
         if(this.state.redirect){
-            window.alert("hetuyu")
+            ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
             return <Redirect to={"/login"}/>
         }
         else {

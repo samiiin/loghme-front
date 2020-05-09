@@ -182,3 +182,35 @@ body,html{
 
 }
 
+.google-sign{
+    margin-top: 8%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 13vw;
+    height: 6vh;
+    text-align: center;
+    -webkit-box-shadow: 0 0 5px #e8e8e8;
+    box-shadow: 0 0 5px #b1b1b1;
+    margin-left: 1.5%;
+    cursor: pointer;
+}
+
+.google-sign img{
+    width: 20%;
+    hight:20%;
+}
+
+.btn-text{
+    padding-left: 4%;
+    text-align: center;
+    font-size: 1.7vmin;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    color:black;
+}
+
+
+

@@ -6,6 +6,8 @@ import {Spinner} from './Spinner'
 import {Home} from './Home'
 import ReactDOM from "react-dom";
 import {Signup} from "./Signup";
+import glogo from "../images/google-logo.png"
+
 export function validatePassword(pass) {
     var errors ="";
     var passw = /^(?=.*\d)(?=.*[a-zA-Z\u0600-\u06FF\s]).{6,20}$/;
@@ -23,12 +25,14 @@ export class Login extends React.Component{
         super();
         this.goTohome = this.goTohome.bind(this)
         this.signup = this.signup.bind(this)
+        this.signIn = this.signIn.bind(this)
         this.state = {
             username : "",
             password: "",
             redirect:false,
             loading: true,
             redirectPage:"",
+            auth2:null,
         };
     }
 
@@ -81,7 +85,6 @@ export class Login extends React.Component{
     }
 
     componentDidMount() {
-        window.alert("mount")
         const reqOptions = {
             method: "GET",
             headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
@@ -93,77 +96,24 @@ export class Login extends React.Component{
                         this.setState({loading:false, redirect:true})
                     }
                     else{
-                        this.googleSDK()
+                        /*this.googleSDK()*/
                         localStorage.clear();
-                        this.setState({loading:false},window.alert("set state"))
+                        try {
+                            const params = {
+                                client_id: "805689182939-0ga0omqkur2mmmo22066rphmi97d1qkt.apps.googleusercontent.com",
+                            };
+                            window['gapi'].load('auth2', () => {
+                                window['gapi'].auth2.init(params);
+
+                            });
+                        } catch (error) {
+                            console.log(error.name, ':', error.message);
+                        }
+
+                        this.setState({loading:false});
                     }
                 }
             )
-
-    }
-
-
-    signOut(){
-        var auth2 = window.gapi.auth2.getAuthInstance();
-        auth2.signOut().then(auth2.disconnect())
-    }
-
-
-    prepareLoginButton = () => {
-        console.log(this.refs.googleLoginBtn);
-        this.auth2.attachClickHandler(this.refs.googleLoginBtn, {},
-            (googleUser) => {
-
-                let profile = googleUser.getBasicProfile();
-                console.log('Token || ' + googleUser.getAuthResponse().id_token);
-                console.log('ID: ' + profile.getId());
-                console.log('Name: ' + profile.getName());
-                console.log('Image URL: ' + profile.getImageUrl());
-                console.log('Email: ' + profile.getEmail());
-                const requestOptions = {
-                    method: 'POST',
-                    headers: {
-                        'Authorization' : "Bearer"+googleUser.getAuthResponse().id_token,
-                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                    },
-                };
-                fetch('http://localhost:8080/IE/loginByGoogle', requestOptions)
-                    .then(response => response.json())
-                    .then(data =>{
-                            if(data.message === "سلام!"){
-                                localStorage.setItem("userInfo", data.token);
-                                this.setState({redirect:true, redirectPage:"home"})
-
-                            }
-                            else{
-                                this.setState({redirect:true, redirectPage:"signup"})
-                            }
-                        }
-                    )
-            }, (error) => {
-                //alert(JSON.stringify(error, undefined, 2));
-            });
-
-    }
-
-    googleSDK = () => {
-        window['googleSDKLoaded'] = () => {
-            window['gapi'].load('auth2', () => {
-                this.auth2 = window['gapi'].auth2.init({
-                    client_id: '805689182939-0ga0omqkur2mmmo22066rphmi97d1qkt.apps.googleusercontent.com',
-                });
-                this.prepareLoginButton();
-            });
-        }
-
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'google-jssdk'));
-
 
     }
 
@@ -171,8 +121,42 @@ export class Login extends React.Component{
         this.setState({ [e.target.name]: e.target.value });
     }
 
-    signup(){
+    signup = () => {
         ReactDOM.render(<BrowserRouter><Redirect to="/signup"/><Signup /></BrowserRouter>, document.getElementById("root"))
+    }
+
+    signOut(){
+        var auth2 = window.gapi.auth2.getAuthInstance();
+        auth2.signOut().then(auth2.disconnect())
+    }
+
+    signIn = () => {
+
+        const auth2 = window['gapi'].auth2.getAuthInstance();
+        auth2.signIn()
+            .then((res) => {
+                const requestOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': "Bearer" + res.getAuthResponse().id_token,
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                };
+                fetch('http://localhost:8080/IE/loginByGoogle', requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                            if (data.message === "سلام!") {
+                                localStorage.setItem("userInfo", data.token);
+                                this.setState({redirect: true, redirectPage: "home"})
+
+                            } else {
+                                this.setState({redirect: true, redirectPage: "signup"})
+                            }
+                        }
+                    )
+
+
+            })
     }
 
     render(){
@@ -194,10 +178,12 @@ export class Login extends React.Component{
         }
         else
         {
-            window.alert("render")
+            //window.alert("render")
             return (
 
                 <div class="page-container">
+                    <script src="https://apis.google.com/js/platform.js?onload=onLoad'" async defer></script>
+                    <meta name="google-signin-client_id" content="805689182939-0ga0omqkur2mmmo22066rphmi97d1qkt.apps.googleusercontent.com"/>
                     <div class="page-top">
                         <div  class="register" onClick={this.signup}>ثبت نام</div>
                         <div class="login"> ورود</div>
@@ -216,12 +202,18 @@ export class Login extends React.Component{
                             </div>
                         </div>
                         <button type="button" className="btn-login" onClick={this.goTohome}>ورود</button>
-                        <div className="g-signin2" data-theme="light"
-                             ref="googleLoginBtn">button
-                        </div>
-                        <div className="gLogOut" onClick={this.signOut}>خروج از گوگل</div>
-                    </div>
+                        {!window['gapi'].auth2.getAuthInstance().isSignedIn.get() && <div className="google-sign" onClick={this.signIn}>
+                            <div className="btn-text">Sign in</div>
+                            <img className="google-img" alt={"google"} src={glogo}/>
 
+                        </div>}
+                        {window['gapi'].auth2.getAuthInstance().isSignedIn.get() && <div className="google-sign" onClick={this.signIn}>
+                            <div className="btn-text">Sign out</div>
+                            <img className="google-img" alt={"google"} src={glogo}/>
+                        </div>}
+
+
+                    </div>
                 </div>
 
             );
