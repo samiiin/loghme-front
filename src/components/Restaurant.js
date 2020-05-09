@@ -319,16 +319,15 @@ class Basket extends React.Component{
         };
         fetch('http://localhost:8080/IE/finalizeOrder',requestOptions)
             .then(response => response.json())
-            .then(data => {this.setState(prevState => ({status: data.status,message:data.message}
-            ))})
-            .then(data=>{
+            .then(data => {
                 if(data.status!=null && data.status===-1){
                     this.setState({redirect:true})
                 }
-                else {
-                    window.alert(this.state.message)
+                else{
+                    this.setState(prevState => ({status: data.status,message:data.message}))
+                    window.alert(data.message)
                 }
-            })
+             })
             .then(()=>{
                 if(!this.state.redirect)
                 CurrentBasket("basket-container")

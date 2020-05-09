@@ -178,9 +178,7 @@ export class Login extends React.Component{
         }
         else
         {
-            //window.alert("render")
             return (
-
                 <div class="page-container">
                     <script src="https://apis.google.com/js/platform.js?onload=onLoad'" async defer></script>
                     <meta name="google-signin-client_id" content="805689182939-0ga0omqkur2mmmo22066rphmi97d1qkt.apps.googleusercontent.com"/>
@@ -202,15 +200,14 @@ export class Login extends React.Component{
                             </div>
                         </div>
                         <button type="button" className="btn-login" onClick={this.goTohome}>ورود</button>
-                        {!window['gapi'].auth2.getAuthInstance().isSignedIn.get() && <div className="google-sign" onClick={this.signIn}>
+                        <div className="google-sign" onClick={this.signIn}>
                             <div className="btn-text">Sign in</div>
                             <img className="google-img" alt={"google"} src={glogo}/>
 
-                        </div>}
-                        {window['gapi'].auth2.getAuthInstance().isSignedIn.get() && <div className="google-sign" onClick={this.signIn}>
-                            <div className="btn-text">Sign out</div>
-                            <img className="google-img" alt={"google"} src={glogo}/>
-                        </div>}
+                        </div>
+                        <div class="google-signout" onClick={this.signOut}>
+                            sign out
+                        </div>
 
 
                     </div>

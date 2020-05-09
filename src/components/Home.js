@@ -268,7 +268,7 @@ export class SearchResult extends React.Component{
     }
 
     render() {
-        if(this.State.redirect){
+        if(this.state.redirect){
             ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
             return (<Redirect to="/login"/>)
         }
