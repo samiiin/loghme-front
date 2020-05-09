@@ -13,7 +13,7 @@ export class Header extends React.Component{
 
     constructor() {
         super();
-        this.state = { ordinaryFoods:[],partyFoods:[],modalShow:false, redirect:false, redirectPage:"",}
+        this.state = { ordinaryFoods:[],partyFoods:[],modalShow:false, redirect:false}
         this.showBasket = this.showBasket.bind(this)
     }
 
@@ -24,9 +24,13 @@ export class Header extends React.Component{
 
     logOut() {
         localStorage.removeItem("userInfo");
-        fetch('http://localhost:8080/IE/logout')
-            .then(resp => resp.json());
-        ReactDOM.render(<BrowserRouter history={"/login"}><Login /></BrowserRouter> ,document.getElementById("root"))
+        const reqOptions = {
+            method: "POST",
+            headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
+        }
+        fetch('http://localhost:8080/IE/logout',reqOptions)
+            .then(resp => resp.json())
+           .then(ReactDOM.render(<BrowserRouter><Redirect to="/login"/><Login /></BrowserRouter>, document.getElementById("root")))
     }
 
     goToHome(){
@@ -39,7 +43,8 @@ export class Header extends React.Component{
     render() {
 
         if(this.state.redirect){
-            return <Redirect to={"/"+this.state.redirectPage}/>
+            window.alert("hetuyu")
+            return <Redirect to={"/login"}/>
         }
         else {
             let modalClose
@@ -89,6 +94,7 @@ class BasketModal extends React.Component {
 
                 <Modal.Body closeButton id="contained-modal-title-vcenter">
                     <div class="basket-container"></div>
+
                     {CurrentBasket("basket-container")}
 
                 </Modal.Body>

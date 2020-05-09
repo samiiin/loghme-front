@@ -6,7 +6,7 @@ import {Restaurant} from './Restaurant';
 import {FoodModal} from './FoodModal'
 import {Header} from './Header'
 import {Spinner} from './Spinner'
-import {BrowserRouter,Redirect,Link} from "react-router-dom";
+import {BrowserRouter, Redirect, Link} from "react-router-dom";
 import {Login} from "./Login";
 export function foodPartySet (id){
     const reqOptions = {
@@ -17,7 +17,7 @@ export function foodPartySet (id){
         .then(resp => resp.json())
         .then(data => {
             if(data.status!=null && data.status===-1){
-                ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
+                ReactDOM.render(<BrowserRouter><Redirect to="/login"/><Login /></BrowserRouter>, document.getElementById("root"))
             }
             else if(document.getElementById("party-box")) {
                     ReactDOM.render(<FoodParty discounts={data} loading={false}/>, document.getElementById(id))
@@ -57,7 +57,7 @@ export class Home extends React.Component {
         }
         else if(this.state.redirect){
             ReactDOM.render(<BrowserRouter  history="/login"><Login /></BrowserRouter>, document.getElementById("root"))
-            return <Redirect to="/Login"/>
+            return <Redirect to="/login"/>
         }
         else {
             return (

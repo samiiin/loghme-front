@@ -28,6 +28,7 @@ export class Credit extends React.Component {
             .then(data => {
                 if(data.status!=null && data.status===-1){
                     this.setState({redirect:true})
+                    this.forceUpdate()
                 }
                 else{
                     this.setState(prevState => ({
@@ -50,10 +51,11 @@ export class Credit extends React.Component {
         if(this.state.redirect){
             ReactDOM.render(<BrowserRouter
                 history="/login"><Login/></BrowserRouter>, document.getElementById("root"))
-            return <Redirect to="/login"/>
+            return <Redirect to="/login" />
         }
         else {
             return (
+
 
                 <div>
                     <Header page="credit"/>

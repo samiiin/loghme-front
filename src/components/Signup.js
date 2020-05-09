@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import '../css/signup.css'
 import {Login} from "./Login";
 import pageImage from "../images/3.jpg";
-import {Link, Redirect} from "react-router-dom";
+import {BrowserRouter, Redirect} from "react-router-dom";
+import {Home} from './Home'
 
 export function validateUserName(str){
     var errors = "";
@@ -97,10 +98,6 @@ export class Signup extends React.Component{
         };
     }
 
-    login(){
-        ReactDOM.render(<Login />,document.getElementById("root"));
-    }
-
     componentDidMount() {
         const reqOptions = {
             method: "GET",
@@ -175,6 +172,10 @@ export class Signup extends React.Component{
             )
     }
 
+    login(){
+        ReactDOM.render(<BrowserRouter><Redirect to="/login"/><Login /></BrowserRouter>, document.getElementById("root"))
+    }
+
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
@@ -182,14 +183,15 @@ export class Signup extends React.Component{
 
     render(){
         if(this.state.redirect){
-            return <Redirect to="/login"/>
+            ReactDOM.render(<BrowserRouter><Home /></BrowserRouter>, document.getElementById("root"))
+            return <Redirect to="/home"/>
         }
         else {
             return (
                 <div className="page-container">
                     <div className="page-top">
                         <div className="register">ثبت نام</div>
-                        <Link to="/login" className="login"> ورود</Link>
+                        <div onClick={this.login} className="login"> ورود</div>
 
                     </div>
                     <img className="picture-page" src={pageImage} alt="login"/>

@@ -18,9 +18,9 @@ export function CurrentBasket (divclass){
     fetch('http://localhost:8080/IE/currentBasket',reqOptions)
         .then(resp => resp.json())
         .then(data => {
+
                 if (data.status != null && data.status === -1) {
-                    ReactDOM.render(<BrowserRouter
-                        history="/login"><Login/></BrowserRouter>, document.getElementById("root"))
+                    ReactDOM.render(<BrowserRouter><Redirect to="/login"/><Login /></BrowserRouter>, document.getElementById("root"))
                 } else {
                     ordinaryFoods = data.foods
                     partyFoods = data.discountFoods

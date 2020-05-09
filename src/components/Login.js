@@ -1,7 +1,7 @@
 import React from "react";
 import '../css/login.css'
 import pageImage from '../images/3.jpg'
-import {Link, Redirect, BrowserRouter} from "react-router-dom";
+import {Redirect, BrowserRouter} from "react-router-dom";
 import {Spinner} from './Spinner'
 import {Home} from './Home'
 import ReactDOM from "react-dom";
@@ -22,12 +22,13 @@ export class Login extends React.Component{
     constructor() {
         super();
         this.goTohome = this.goTohome.bind(this)
+        this.signup = this.signup.bind(this)
         this.state = {
             username : "",
             password: "",
             redirect:false,
             loading: true,
-            redirectPage:""
+            redirectPage:"",
         };
     }
 
@@ -80,6 +81,7 @@ export class Login extends React.Component{
     }
 
     componentDidMount() {
+        window.alert("mount")
         const reqOptions = {
             method: "GET",
             headers: new Headers({'Authorization' : "Bearer"+localStorage.getItem('userInfo')})
@@ -91,13 +93,15 @@ export class Login extends React.Component{
                         this.setState({loading:false, redirect:true})
                     }
                     else{
-                        this.googleSDK();
+                        this.googleSDK()
                         localStorage.clear();
-                        this.setState({loading:false})
+                        this.setState({loading:false},window.alert("set state"))
                     }
                 }
             )
+
     }
+
 
     signOut(){
         var auth2 = window.gapi.auth2.getAuthInstance();
@@ -160,10 +164,15 @@ export class Login extends React.Component{
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'google-jssdk'));
 
+
     }
 
     handleChange = (e) => {
         this.setState({ [e.target.name]: e.target.value });
+    }
+
+    signup(){
+        ReactDOM.render(<BrowserRouter><Redirect to="/signup"/><Signup /></BrowserRouter>, document.getElementById("root"))
     }
 
     render(){
@@ -185,12 +194,13 @@ export class Login extends React.Component{
         }
         else
         {
+            window.alert("render")
             return (
+
                 <div class="page-container">
                     <div class="page-top">
-                        <Link to="/signup" class="register">ثبت نام</Link>
+                        <div  class="register" onClick={this.signup}>ثبت نام</div>
                         <div class="login"> ورود</div>
-
                     </div>
                     <img class="picture-page" src={pageImage} alt="login"/>
                     <div className="right-part">
@@ -209,8 +219,7 @@ export class Login extends React.Component{
                         <div className="g-signin2" data-theme="light"
                              ref="googleLoginBtn">button
                         </div>
-
-                        <a href="#" className="gLogOut" onClick={this.signOut}>خروج از گوگل</a>
+                        <div className="gLogOut" onClick={this.signOut}>خروج از گوگل</div>
                     </div>
 
                 </div>

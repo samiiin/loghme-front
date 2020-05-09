@@ -16,7 +16,6 @@ import {Orders} from "./components/Orders";
 ReactDOM.render(
     <Router>
         <Switch>
-
             <Route exact path="/"><Login /></Route>
 
             <Route path="/login"><Login /></Route>
@@ -30,7 +29,6 @@ ReactDOM.render(
             <Route path="/restaurant/:id" render={({match}) => (<Restaurant id={match.params.id} />)}/>
 
             <Route path="/orders"><Orders /></Route>
-
         </Switch>
     </Router>,
     document.getElementById('root')
